@@ -320,6 +320,17 @@ const ko = {
   "settings.addFailed": "설정 추가에 실패했습니다.",
   "settings.configRemoved": "설정이 삭제되었습니다.",
   "settings.removeFailed": "삭제에 실패했습니다.",
+  "settings.configUpdated": "설정이 업데이트되었습니다!",
+  "settings.updateFailed": "업데이트에 실패했습니다.",
+  "settings.setDefaultSuccess": "기본값으로 설정되었습니다.",
+  "settings.unsetDefaultSuccess": "기본값이 해제되었습니다.",
+  "settings.unsetDefault": "기본값 해제",
+  "settings.setDefaultSuccess": "기본값으로 설정되었습니다.",
+  "settings.unsetDefaultIcon": "★",
+  "settings.setDefaultIcon": "☆",
+  "settings.leaveBlankToKeep": "현재 키를 유지하려면 비워두세요",
+  "settings.showApiKey": "API 키 보이기",
+  "settings.hideApiKey": "API 키 숨기기",
 
   // Voice Input
   "voice.micDenied": "마이크 권한이 거부되었습니다.",

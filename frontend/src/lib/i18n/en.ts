@@ -322,6 +322,17 @@ const en: Record<TranslationKey, string> = {
   "settings.addFailed": "Failed to add configuration.",
   "settings.configRemoved": "Configuration removed.",
   "settings.removeFailed": "Failed to delete.",
+  "settings.configUpdated": "Configuration updated!",
+  "settings.updateFailed": "Update failed.",
+  "settings.setDefaultSuccess": "Set as default successfully.",
+  "settings.unsetDefaultSuccess": "Unset as default successfully.",
+  "settings.unsetDefault": "Unset as default",
+  "settings.setDefaultSuccess": "Set as default successfully.",
+  "settings.unsetDefaultIcon": "★",
+  "settings.setDefaultIcon": "☆",
+  "settings.leaveBlankToKeep": "Leave blank to keep current key",
+  "settings.showApiKey": "Show API Key",
+  "settings.hideApiKey": "Hide API Key",
 
   // Voice Input
   "voice.micDenied": "Microphone permission denied.",

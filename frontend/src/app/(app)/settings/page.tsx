@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import type { LLMConfig, LLMProvider } from "@/types";
 import { useI18n } from "@/lib/i18n";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function SettingsPage() {
   const { t } = useI18n();
@@ -22,6 +23,15 @@ export default function SettingsPage() {
   const [baseUrl, setBaseUrl] = useState("");
   const [isDefault, setIsDefault] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
+  const [editingConfig, setEditingConfig] = useState<LLMConfig | null>(null);
+  const [editProvider, setEditProvider] = useState("");
+  const [editModel, setEditModel] = useState("");
+  const [editApiKey, setEditApiKey] = useState("");
+  const [editBaseUrl, setEditBaseUrl] = useState("");
+  const [editIsDefault, setEditIsDefault] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [addApiKeyVisible, setAddApiKeyVisible] = useState(false);
+  const [editApiKeyVisible, setEditApiKeyVisible] = useState(false);
 
   const fetchConfigs = async () => {
     const res = await api.get<LLMConfig[]>("/llm/configs");
@@ -79,6 +89,65 @@ export default function SettingsPage() {
     } catch {
       toast.error(t("settings.removeFailed"));
     }
+  };
+
+  const handleToggleDefault = async (config: LLMConfig) => {
+    const newIsDefault = !config.is_default;
+    try {
+      await api.put(`/llm/configs/${config.id}`, {
+        is_default: newIsDefault,
+      });
+      toast.success(newIsDefault ? t("settings.setDefaultSuccess") : t("settings.unsetDefaultSuccess"));
+      fetchConfigs();
+    } catch {
+      toast.error(t("settings.updateFailed"));
+    }
+  };
+
+  const handleEdit = (config: LLMConfig) => {
+    setEditingConfig(config);
+    setEditProvider(config.provider);
+    setEditModel(config.model);
+    setEditBaseUrl(config.base_url || "");
+    setEditIsDefault(config.is_default);
+    setEditApiKey(""); // Don't show current key, leave blank if not changing
+  };
+
+  const handleUpdate = async () => {
+    if (!editingConfig) return;
+    if (!editProvider || !editModel) {
+      toast.error(t("settings.fillAll"));
+      return;
+    }
+    const currentProvider = providers.find((p) => p.id === editProvider);
+    if (currentProvider?.requires_base_url && !editBaseUrl) {
+      toast.error(t("settings.baseUrlRequired"));
+      return;
+    }
+    setIsUpdating(true);
+    try {
+      const updateData: Record<string, unknown> = {};
+      if (editProvider !== editingConfig.provider) updateData.provider = editProvider;
+      if (editModel !== editingConfig.model) updateData.model = editModel;
+      if (editBaseUrl !== (editingConfig.base_url || "")) updateData.base_url = editBaseUrl || null;
+      if (editApiKey) updateData.api_key = editApiKey;
+      if (editIsDefault !== editingConfig.is_default) updateData.is_default = editIsDefault;
+
+      await api.put(`/llm/configs/${editingConfig.id}`, updateData);
+      toast.success(t("settings.configUpdated"));
+      setEditingConfig(null);
+      setEditApiKey("");
+      fetchConfigs();
+    } catch {
+      toast.error(t("settings.updateFailed"));
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingConfig(null);
+    setEditApiKey("");
   };
 
   return (
@@ -148,12 +217,29 @@ export default function SettingsPage() {
                   </div>
                   <div className="space-y-2">
                     <Label>{t("settings.apiKey")} <span className="text-destructive">*</span></Label>
-                    <Input
-                      type="password"
-                      placeholder={t("settings.difyApiKeyPlaceholder")}
-                      value={apiKey}
-                      onChange={(e) => setApiKey(e.target.value)}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={addApiKeyVisible ? "text" : "password"}
+                        placeholder={t("settings.difyApiKeyPlaceholder")}
+                        value={apiKey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                        className="pr-10"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setAddApiKeyVisible(!addApiKeyVisible)}
+                        title={addApiKeyVisible ? t("settings.hideApiKey") : t("settings.showApiKey")}
+                      >
+                        {addApiKeyVisible ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
                     <p className="text-[11px] text-muted-foreground">
                       {t("settings.difyApiKey")}
                     </p>
@@ -162,12 +248,29 @@ export default function SettingsPage() {
               ) : (
                 <div className="space-y-2">
                   <Label>{t("settings.apiKey")}</Label>
-                  <Input
-                    type="password"
-                    placeholder={t("settings.apiKeyPlaceholder")}
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                  />
+                  <div className="relative">
+                    <Input
+                      type={addApiKeyVisible ? "text" : "password"}
+                      placeholder={t("settings.apiKeyPlaceholder")}
+                      value={apiKey}
+                      onChange={(e) => setApiKey(e.target.value)}
+                      className="pr-10"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setAddApiKeyVisible(!addApiKeyVisible)}
+                      title={addApiKeyVisible ? t("settings.hideApiKey") : t("settings.showApiKey")}
+                    >
+                      {addApiKeyVisible ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
               )}
             </>
@@ -197,13 +300,117 @@ export default function SettingsPage() {
           {configs.length === 0 ? (
             <p className="text-sm text-muted-foreground">{t("settings.noConfigs")}</p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {configs.map((config) => {
                 const providerInfo = providers.find((p) => p.id === config.provider);
                 const displayName = providerInfo?.name || config.provider;
+                const isEditing = editingConfig?.id === config.id;
+
+                if (isEditing) {
+                  return (
+                    <div key={config.id} className="border rounded-md p-4 space-y-3">
+                      <div className="space-y-2">
+                        <Label>{t("settings.provider")}</Label>
+                        <Select value={editProvider} onValueChange={(v) => {
+                          setEditProvider(v);
+                          const prov = providers.find((p) => p.id === v);
+                          if (prov?.requires_base_url) {
+                            setEditModel(prov.models[0] || "default");
+                          } else {
+                            setEditModel("");
+                          }
+                          setEditBaseUrl("");
+                        }}>
+                          <SelectTrigger><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            {providers.map((p) => (
+                              <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {editProvider && !providers.find((p) => p.id === editProvider)?.requires_base_url && (
+                        <div className="space-y-2">
+                          <Label>{t("settings.model")}</Label>
+                          <Select value={editModel} onValueChange={(v) => setEditModel(v)}>
+                            <SelectTrigger><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              {providers.find((p) => p.id === editProvider)?.models.map((m) => (
+                                <SelectItem key={m} value={m}>{m}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+
+                      {providers.find((p) => p.id === editProvider)?.requires_base_url && (
+                        <div className="space-y-2">
+                          <Label>{t("settings.baseUrl")}</Label>
+                          <Input
+                            type="url"
+                            placeholder={t("settings.baseUrlPlaceholder")}
+                            value={editBaseUrl}
+                            onChange={(e) => setEditBaseUrl(e.target.value)}
+                          />
+                        </div>
+                      )}
+
+                      <div className="space-y-2">
+                        <Label>{t("settings.apiKey")}</Label>
+                        <div className="relative">
+                          <Input
+                            type={editApiKeyVisible ? "text" : "password"}
+                            placeholder={t("settings.apiKeyPlaceholder")}
+                            value={editApiKey}
+                            onChange={(e) => setEditApiKey(e.target.value)}
+                            className="pr-10"
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                            onClick={() => setEditApiKeyVisible(!editApiKeyVisible)}
+                            title={editApiKeyVisible ? t("settings.hideApiKey") : t("settings.showApiKey")}
+                          >
+                            {editApiKeyVisible ? (
+                              <EyeOff className="h-4 w-4" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
+                          </Button>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground">
+                          {t("settings.leaveBlankToKeep")}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={`editDefault-${config.id}`}
+                          checked={editIsDefault}
+                          onChange={(e) => setEditIsDefault(e.target.checked)}
+                        />
+                        <Label htmlFor={`editDefault-${config.id}`}>{t("settings.setDefault")}</Label>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button onClick={handleUpdate} disabled={isUpdating} size="sm">
+                          {t("common.save")}
+                        </Button>
+                        <Button variant="outline" onClick={handleCancelEdit} size="sm">
+                          {t("common.cancel")}
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }
+
                 return (
-                  <div key={config.id} className="flex items-center justify-between border rounded-md p-3">
-                    <div className="space-y-0.5">
+                  <div key={config.id} className="border rounded-md p-3">
+                    <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">{displayName}</span>
                         {!config.base_url && (
@@ -211,6 +418,24 @@ export default function SettingsPage() {
                         )}
                         {config.is_default && <Badge>{t("common.default")}</Badge>}
                       </div>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleToggleDefault(config)}
+                          title={config.is_default ? t("settings.unsetDefault") : t("settings.setDefault")}
+                        >
+                          {config.is_default ? t("settings.unsetDefaultIcon") : t("settings.setDefaultIcon")}
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleEdit(config)}>
+                          {t("common.edit")}
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleDelete(config.id)}>
+                          {t("common.remove")}
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="space-y-0.5">
                       {config.base_url ? (
                         <>
                           <p className="text-xs text-muted-foreground">URL: {config.base_url}</p>
@@ -220,9 +445,6 @@ export default function SettingsPage() {
                         <p className="text-xs text-muted-foreground">Key: {config.api_key_hint}</p>
                       )}
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => handleDelete(config.id)}>
-                      {t("common.remove")}
-                    </Button>
                   </div>
                 );
               })}

@@ -124,7 +124,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     const state = get() as any;
     state._streamingBuffer += content;
 
-    // Throttle: flush buffer every 80ms instead of every chunk
+    // Throttle: flush buffer every 16ms (60fps) for smoother streaming
     if (!state._streamingFlushTimer) {
       const timer = setTimeout(() => {
         const s = get() as any;
@@ -133,7 +133,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
           s._streamingBuffer = "";
         }
         s._streamingFlushTimer = null;
-      }, 80);
+      }, 16);
       state._streamingFlushTimer = timer;
     }
   },
