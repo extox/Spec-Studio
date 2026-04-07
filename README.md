@@ -1,15 +1,32 @@
-# Dev.AI Spec Studio
+# Spec Studio
 
-**AI-Driven Development 실행을 위한 웹기반 Spec lifecycle 관리 협업 서비스**
+**SDD(Spec-Driven Development) 기반 Enterprise AI-Driven Development 웹 서비스**
 
-BMad Method V6를 웹 환경에서 다수의 사용자가 AI 페르소나와 함께 소프트웨어 개발 산출물(Artifact)을 체계적으로 생성하고 관리할 수 있는 플랫폼입니다.
+소프트웨어 개발의 전체 Spec lifecycle을 AI와 함께 체계적으로 관리하는 협업 플랫폼입니다.
+
+---
+
+## 비전
+
+**Spec-Driven Development(SDD)** 를 핵심 방법론으로, AI가 분석·기획·설계·구현 전 단계의 산출물(Spec)을 주도적으로 생성하고 검증하는 **Enterprise AI-Driven Development** 서비스를 목표로 합니다.
+
+다음의 업계 선행 방법론과 프레임워크를 참고·통합하여 설계되었습니다:
+
+| 참고 방법론 | 핵심 차용 요소 |
+|------------|---------------|
+| **BMad Method V6** | AI 페르소나 기반 워크플로우, 단계별 아티팩트 생성 체계 |
+| **GSD (Get Stuff Done)** | 실용적 산출물 중심 실행 프레임워크 |
+| **AWS AI-DLC** | Enterprise급 AI-Driven Development Lifecycle 거버넌스 |
+
+이들을 종합하여 **"Spec이 곧 개발의 출발점이자 품질 기준"** 이 되는 SDD 패러다임을 웹 환경에서 실현합니다.
 
 ---
 
 ## 핵심 가치
 
+- **SDD 실현** — Spec(산출물)이 개발의 기준점이 되어, AI와 사람이 함께 분석→기획→설계→구현 전 과정의 Spec을 생성·검증·관리
 - **AI 페르소나 기반 협업** — Analyst, PM, Architect, UX Designer, Scrum Master, Tech Writer 6명의 전문가 AI와 대화하며 산출물을 만들어갑니다
-- **구조화된 워크플로우** — BMad Method V6의 단계별 워크플로우(Brief → PRD → Architecture → UX → Epics → Story)를 따라 체계적으로 진행
+- **구조화된 워크플로우** — 단계별 워크플로우(Brief → PRD → Architecture → UX → Epics → Story)를 따라 체계적으로 진행
 - **다중 사용자 실시간 협업** — WebSocket 기반 실시간 채팅으로 팀원들이 함께 페르소나와 상호작용
 - **아티팩트 버전 관리** — 산출물의 생성, 수정, 버전 히스토리 추적 및 diff 비교, 복구 기능
 - **멀티 LLM 프로바이더 지원** — OpenAI, Anthropic, Google, Ollama 등 다양한 LLM 연동
@@ -18,7 +35,7 @@ BMad Method V6를 웹 환경에서 다수의 사용자가 AI 페르소나와 함
 
 ## 주요 기능
 
-### BMad 워크플로우 실행
+### SDD 워크플로우 실행
 - 8개 워크플로우: Create Brief, Create PRD, Validate PRD, Create Architecture, Create UX Design, Create Epics, Sprint Planning, Create Story
 - A/P/R/C 메뉴: Advanced Elicitation, Party Mode(멀티 페르소나 토론), Propose Mode(AI 자동 초안), Continue
 - 대화 중 페르소나 전환 가능
@@ -148,8 +165,8 @@ Web_BMad01/
 ### 1. 저장소 클론
 
 ```bash
-git clone https://github.com/your-repo/Web_BMad01.git
-cd Web_BMad01
+git clone https://github.com/extox/Spec-Studio.git
+cd Spec-Studio
 ```
 
 ### 2. 백엔드 설정
@@ -234,9 +251,9 @@ npm run dev
 
 ---
 
-## BMad Method V6
+## SDD(Spec-Driven Development) 워크플로우
 
-이 플랫폼은 [BMad Method V6](https://github.com/bmadcode/bmad-method)를 기반으로 합니다.
+Spec-Driven Development의 핵심은 **개발 전 모든 단계의 산출물(Spec)을 AI와 함께 충분히 정의하고 검증한 후 구현에 진입하는 것**입니다. 본 플랫폼은 이를 다음 4단계로 구현합니다.
 
 ### 개발 단계
 1. **Analysis (분석)** — Analyst가 프로젝트 아이디어를 구체화하고 Product Brief 작성
@@ -249,6 +266,11 @@ npm run dev
 - **[P] Party Mode** — 멀티 페르소나 3단계 토론
 - **[R] Propose Mode** — AI가 현재 단계 내용을 자동 작성
 - **[C] Continue** — 다음 단계로 진행
+
+### 참고 방법론
+- [BMad Method V6](https://github.com/bmadcode/bmad-method) — AI 페르소나 및 워크플로우 체계
+- GSD (Get Stuff Done) — 실용적 실행 프레임워크
+- AWS AI-DLC — Enterprise AI Development Lifecycle
 
 ---
 
