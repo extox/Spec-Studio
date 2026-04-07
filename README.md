@@ -15,7 +15,7 @@
 | 참고 방법론 | 핵심 차용 요소 |
 |------------|---------------|
 | **BMad Method V6** | AI 페르소나 기반 워크플로우, 단계별 아티팩트 생성 체계 |
-| **GSD (Get Shit Done)** | 실용적 산출물 중심 실행 프레임워크 |
+| **GSD (Get Shit Done)** | 실행 중심의 실용적 개발 프레임워크 |
 | **AWS AI-DLC** | Enterprise급 AI-Driven Development Lifecycle 거버넌스 |
 
 이들을 종합하여 **"Spec이 곧 개발의 출발점이자 품질 기준"** 이 되는 SDD 패러다임을 웹 환경에서 실현합니다.
@@ -24,7 +24,7 @@
 
 ## 핵심 가치
 
-- **SDD 실현** — Spec(산출물)이 개발의 기준점이 되어, AI와 사람이 함께 분석→기획→설계→구현 전 과정의 Spec을 생성·검증·관리
+- **SDD 실현** — Spec이 개발의 기준점이 되어, AI와 사람이 함께 분석→기획→설계→구현 전 과정의 명세를 정의·검증·관리
 - **AI 페르소나 기반 협업** — Analyst, PM, Architect, UX Designer, Scrum Master, Tech Writer 6명의 전문가 AI와 대화하며 산출물을 만들어갑니다
 - **구조화된 워크플로우** — 단계별 워크플로우(Brief → PRD → Architecture → UX → Epics → Story)를 따라 체계적으로 진행
 - **다중 사용자 실시간 협업** — WebSocket 기반 실시간 채팅으로 팀원들이 함께 페르소나와 상호작용
