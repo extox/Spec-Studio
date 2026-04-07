@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .glass {
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+  }
+  .glass-subtle {
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+  }
+  .professional-shadow {
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+  }
+  .professional-shadow-md {
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06);
+  }
+  .professional-shadow-lg {
+    box-shadow: 0 4px 6px rgba(15, 23, 42, 0.03), 0 10px 24px rgba(15, 23, 42, 0.08);
+  }
+}
+
+@layer base {
+  :root {
+    --background: #f7f8fa;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    --primary: #1e3a5f;
+    --primary-foreground: #f8fafc;
+    --secondary: #f1f5f9;
+    --secondary-foreground: #334155;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --accent: #e2e8f0;
+    --accent-foreground: #1e293b;
+    --destructive: #be123c;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --ring: #1e3a5f;
+    --radius: 0.5rem;
+    --sidebar: #fafbfc;
+    --sidebar-foreground: #334155;
+    --sidebar-primary: #1e3a5f;
+    --sidebar-primary-foreground: #f8fafc;
+    --sidebar-accent: #f1f5f9;
+    --sidebar-accent-foreground: #1e293b;
+    --sidebar-border: #e2e8f0;
+    --sidebar-ring: #1e3a5f;
+    --chart-1: #1e3a5f;
+    --chart-2: #2563eb;
+    --chart-3: #3b82f6;
+    --chart-4: #93c5fd;
+    --chart-5: #dbeafe;
+    --success: #059669;
+    --warning: #d97706;
+  }
+  .dark {
+    --background: #0c0f1a;
+    --foreground: #e2e8f0;
+    --card: #141827;
+    --card-foreground: #e2e8f0;
+    --popover: #141827;
+    --popover-foreground: #e2e8f0;
+    --primary: #60a5fa;
+    --primary-foreground: #0c0f1a;
+    --secondary: #1e293b;
+    --secondary-foreground: #cbd5e1;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --accent: #1e293b;
+    --accent-foreground: #cbd5e1;
+    --destructive: #f43f5e;
+    --border: #1e293b;
+    --input: #1e293b;
+    --ring: #60a5fa;
+    --sidebar: #0e1120;
+    --sidebar-foreground: #cbd5e1;
+    --sidebar-primary: #60a5fa;
+    --sidebar-primary-foreground: #e2e8f0;
+    --sidebar-accent: #1e293b;
+    --sidebar-accent-foreground: #cbd5e1;
+    --sidebar-border: #1e293b;
+    --sidebar-ring: #60a5fa;
+    --chart-1: #60a5fa;
+    --chart-2: #93c5fd;
+    --chart-3: #bfdbfe;
+    --chart-4: #dbeafe;
+    --chart-5: #eff6ff;
+    --success: #34d399;
+    --warning: #fbbf24;
+  }
+  * {
+    @apply border-border;
+    outline-color: var(--ring);
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  html {
+    @apply font-sans antialiased;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Guide page table styling */
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.prose thead {
+  background-color: var(--muted);
+}
+
+.prose thead th {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--foreground);
+}
+
+.prose tbody td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  vertical-align: top;
+}
+
+.prose tbody tr:nth-child(even) {
+  background-color: var(--muted);
+  opacity: 0.7;
+}
+
+.prose tbody tr:hover {
+  background-color: var(--accent);
+  opacity: 1;
+}
+
+/* Guide viewer: remove editor chrome when using preview-only mode */
+.w-md-editor[data-preview="preview"] {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure images render in markdown preview */
+.wmde-markdown img,
+.w-md-editor-preview img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  margin: 0.75rem 0;
+}
