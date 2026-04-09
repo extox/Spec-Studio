@@ -391,7 +391,7 @@ async def translate_content(
         select(LLMConfig).where(
             LLMConfig.user_id == admin.id,
             LLMConfig.is_default == True,
-        )
+        ).limit(1)
     )
     config = llm_config.scalar_one_or_none()
     if not config:
@@ -445,7 +445,7 @@ async def translate_short(
         raise HTTPException(status_code=400, detail="Text required")
 
     llm_config = await db.execute(
-        select(LLMConfig).where(LLMConfig.user_id == admin.id, LLMConfig.is_default == True)
+        select(LLMConfig).where(LLMConfig.user_id == admin.id, LLMConfig.is_default == True).limit(1)
     )
     config = llm_config.scalar_one_or_none()
     if not config:

@@ -436,9 +436,8 @@ export function ChatWindow({ projectId, sessionId, onDeliverableCreated }: ChatW
             const res = await api.post(`/projects/${projectId}/chat/upload-image`, formData, {
               headers: { "Content-Type": "multipart/form-data" },
             });
-            const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
             return {
-              url: `${apiBase.replace("/api", "")}${res.data.url}`,
+              url: res.data.url,
               providerFileId: res.data.provider_file_id || undefined,
             };
           } catch {

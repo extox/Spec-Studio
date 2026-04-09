@@ -329,6 +329,7 @@ const ko = {
   "settings.unsetDefaultIcon": "★",
   "settings.setDefaultIcon": "☆",
   "settings.leaveBlankToKeep": "현재 키를 유지하려면 비워두세요",
+  "settings.currentKey": "현재 키",
   "settings.showApiKey": "API 키 보이기",
   "settings.hideApiKey": "API 키 숨기기",
 

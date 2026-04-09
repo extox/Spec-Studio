@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, update
 
 from app.database import get_db
 from app.models.user import User
 from app.models.llm_config import LLMConfig
+from app.models.chat_session import ChatSession
 from app.schemas.llm import LLMConfigCreate, LLMConfigUpdate, LLMConfigResponse, LLMProviderInfo
 from app.core.dependencies import get_current_user
 from app.core.security import encrypt_api_key, decrypt_api_key
@@ -57,6 +58,7 @@ async def list_configs(
             decrypted = decrypt_api_key(c.api_key_encrypted)
             hint = f"****{decrypted[-4:]}"
         except Exception:
+            decrypted = None
             hint = "****"
         responses.append(LLMConfigResponse(
             id=c.id,
@@ -66,6 +68,7 @@ async def list_configs(
             is_default=c.is_default,
             created_at=c.created_at,
             api_key_hint=hint,
+            api_key_decrypted=decrypted,
         ))
     return responses
 
@@ -119,8 +122,18 @@ async def update_config(
     if not config:
         raise NotFoundError("LLM config not found")
 
-    if req.provider is not None:
+    if req.provider is not None and req.provider != config.provider:
         config.provider = req.provider
+        # Clear external_conversation_id for all sessions created by this user
+        # since the old provider's conversation IDs are invalid for the new provider
+        await db.execute(
+            update(ChatSession)
+            .where(
+                ChatSession.created_by == user.id,
+                ChatSession.external_conversation_id.isnot(None),
+            )
+            .values(external_conversation_id=None)
+        )
     if req.model is not None:
         config.model = req.model
     if req.base_url is not None:

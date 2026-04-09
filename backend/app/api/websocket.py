@@ -32,7 +32,7 @@ async def _get_llm_config(db: AsyncSession, user_id: int, project_id: int) -> LL
         select(LLMConfig).where(
             LLMConfig.user_id == user_id,
             LLMConfig.is_default == True,
-        )
+        ).limit(1)
     )
     config = result.scalar_one_or_none()
     if config:
@@ -51,10 +51,29 @@ async def _get_llm_config(db: AsyncSession, user_id: int, project_id: int) -> LL
             select(LLMConfig).where(
                 LLMConfig.user_id == owner_id,
                 LLMConfig.is_default == True,
-            )
+            ).limit(1)
         )
         return result.scalar_one_or_none()
 
+    return None
+
+
+def _get_conversation_id(chat_session: ChatSession, llm_config: LLMConfig) -> str | None:
+    """Extract conversation_id only if it belongs to the current LLM config.
+
+    Stored format: "config_id:conversation_id" (e.g. "1:abc-123").
+    Legacy formats are discarded to avoid cross-config conflicts.
+    """
+    stored = chat_session.external_conversation_id
+    if not stored:
+        return None
+    if ":" in stored:
+        config_id_str, conv_id = stored.split(":", 1)
+        try:
+            if int(config_id_str) == llm_config.id:
+                return conv_id
+        except ValueError:
+            pass
     return None
 
 
@@ -237,6 +256,10 @@ async def handle_chat_message(
 
         full_content = ""
         dify_result = DifyResult() if llm_config.provider == "aion-u" else None
+
+        # Only use external_conversation_id if it belongs to the current provider
+        conversation_id = _get_conversation_id(chat_session, llm_config)
+
         try:
             async for chunk in stream_chat(
                 provider=llm_config.provider,
@@ -244,7 +267,7 @@ async def handle_chat_message(
                 api_key=api_key,
                 messages=messages,
                 base_url=llm_config.base_url,
-                conversation_id=chat_session.external_conversation_id,
+                conversation_id=conversation_id,
                 dify_result=dify_result,
                 file_ids=file_ids if llm_config.provider == "aion-u" else None,
             ):
@@ -261,9 +284,9 @@ async def handle_chat_message(
             })
             return
 
-        # Save Dify conversation_id for session continuity
+        # Save conversation_id with provider prefix for session continuity
         if dify_result and dify_result.conversation_id:
-            chat_session.external_conversation_id = dify_result.conversation_id
+            chat_session.external_conversation_id = f"{llm_config.id}:{dify_result.conversation_id}"
 
         # Save assistant message
         metadata = json.dumps({"persona": chat_session.persona})
@@ -978,6 +1001,7 @@ async def _auto_compile_deliverable(
 
     full_content = ""
     dify_result = DifyResult() if llm_config.provider == "aion-u" else None
+    conversation_id = _get_conversation_id(chat_session, llm_config)
     try:
         async for chunk in stream_chat(
             provider=llm_config.provider,
@@ -985,7 +1009,7 @@ async def _auto_compile_deliverable(
             api_key=api_key,
             messages=messages,
             base_url=llm_config.base_url,
-            conversation_id=chat_session.external_conversation_id,
+            conversation_id=conversation_id,
             dify_result=dify_result,
         ):
             full_content += chunk
@@ -1002,7 +1026,7 @@ async def _auto_compile_deliverable(
         return
 
     if dify_result and dify_result.conversation_id:
-        chat_session.external_conversation_id = dify_result.conversation_id
+        chat_session.external_conversation_id = f"{llm_config.id}:{dify_result.conversation_id}"
 
     # Save assistant response
     resp_meta = json.dumps({"persona": chat_session.persona, "deliverable": file_name})

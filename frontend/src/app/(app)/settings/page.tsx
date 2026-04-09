@@ -110,7 +110,7 @@ export default function SettingsPage() {
     setEditModel(config.model);
     setEditBaseUrl(config.base_url || "");
     setEditIsDefault(config.is_default);
-    setEditApiKey(""); // Don't show current key, leave blank if not changing
+    setEditApiKey(config.api_key_decrypted || "");
   };
 
   const handleUpdate = async () => {
@@ -130,7 +130,7 @@ export default function SettingsPage() {
       if (editProvider !== editingConfig.provider) updateData.provider = editProvider;
       if (editModel !== editingConfig.model) updateData.model = editModel;
       if (editBaseUrl !== (editingConfig.base_url || "")) updateData.base_url = editBaseUrl || null;
-      if (editApiKey) updateData.api_key = editApiKey;
+      if (editApiKey && editApiKey !== editingConfig.api_key_decrypted) updateData.api_key = editApiKey;
       if (editIsDefault !== editingConfig.is_default) updateData.is_default = editIsDefault;
 
       await api.put(`/llm/configs/${editingConfig.id}`, updateData);
@@ -224,6 +224,8 @@ export default function SettingsPage() {
                         value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
                         className="pr-10"
+                        autoComplete="new-password"
+                        data-1p-ignore
                       />
                       <Button
                         type="button"
@@ -255,6 +257,8 @@ export default function SettingsPage() {
                       value={apiKey}
                       onChange={(e) => setApiKey(e.target.value)}
                       className="pr-10"
+                      autoComplete="new-password"
+                      data-1p-ignore
                     />
                     <Button
                       type="button"
@@ -365,6 +369,8 @@ export default function SettingsPage() {
                             value={editApiKey}
                             onChange={(e) => setEditApiKey(e.target.value)}
                             className="pr-10"
+                            autoComplete="new-password"
+                            data-1p-ignore
                           />
                           <Button
                             type="button"

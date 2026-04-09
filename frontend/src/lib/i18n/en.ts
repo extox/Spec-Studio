@@ -331,6 +331,7 @@ const en: Record<TranslationKey, string> = {
   "settings.unsetDefaultIcon": "★",
   "settings.setDefaultIcon": "☆",
   "settings.leaveBlankToKeep": "Leave blank to keep current key",
+  "settings.currentKey": "Current key",
   "settings.showApiKey": "Show API Key",
   "settings.hideApiKey": "Hide API Key",
 

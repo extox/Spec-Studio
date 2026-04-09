@@ -255,7 +255,7 @@ async def import_document(
 
     # Try user's default config first
     result = await db.execute(
-        select(LLMConfig).where(LLMConfig.user_id == user.id, LLMConfig.is_default == True)
+        select(LLMConfig).where(LLMConfig.user_id == user.id, LLMConfig.is_default == True).limit(1)
     )
     llm_config = result.scalar_one_or_none()
 
@@ -267,7 +267,7 @@ async def import_document(
         owner_id = owner_result.scalar_one_or_none()
         if owner_id and owner_id != user.id:
             result = await db.execute(
-                select(LLMConfig).where(LLMConfig.user_id == owner_id, LLMConfig.is_default == True)
+                select(LLMConfig).where(LLMConfig.user_id == owner_id, LLMConfig.is_default == True).limit(1)
             )
             llm_config = result.scalar_one_or_none()
 
@@ -351,13 +351,13 @@ async def _get_llm_config_for_user(db: AsyncSession, user_id: int, project_id: i
     from app.models.project_member import ProjectMember as PM
     from app.core.security import decrypt_api_key
 
-    result = await db.execute(select(LLMConfig).where(LLMConfig.user_id == user_id, LLMConfig.is_default == True))
+    result = await db.execute(select(LLMConfig).where(LLMConfig.user_id == user_id, LLMConfig.is_default == True).limit(1))
     llm_config = result.scalar_one_or_none()
     if not llm_config:
         owner_result = await db.execute(select(PM.user_id).where(PM.project_id == project_id, PM.role == "owner"))
         owner_id = owner_result.scalar_one_or_none()
         if owner_id and owner_id != user_id:
-            result = await db.execute(select(LLMConfig).where(LLMConfig.user_id == owner_id, LLMConfig.is_default == True))
+            result = await db.execute(select(LLMConfig).where(LLMConfig.user_id == owner_id, LLMConfig.is_default == True).limit(1))
             llm_config = result.scalar_one_or_none()
     if not llm_config:
         raise HTTPException(status_code=400, detail="LLM API 설정이 필요합니다. 설정 페이지에서 API를 등록해주세요.")

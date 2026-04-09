@@ -114,6 +114,7 @@ export interface LLMConfig {
   is_default: boolean;
   created_at: string;
   api_key_hint?: string;
+  api_key_decrypted?: string;
 }
 
 export interface LLMProvider {

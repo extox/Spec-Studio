@@ -596,8 +596,7 @@ function GuideManagementTab({ t }: { t: (k: string) => string }) {
           headers: { "Content-Type": "multipart/form-data" },
         });
         const url = res.data.url;
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-        const fullUrl = url.startsWith("http") ? url : `${apiBase.replace("/api", "")}${url}`;
+        const fullUrl = url.startsWith("http") ? url : url;
         const imgMd = `\n![${file.name}](${fullUrl})\n`;
         if (editingPage) {
           setEditingPage({ ...editingPage, content_ko: (editingPage.content_ko || "") + imgMd });

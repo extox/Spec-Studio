@@ -127,7 +127,7 @@ async def upload_chat_image(
     provider_file_id = None
     try:
         llm_result = await db.execute(
-            select(LLMConfig).where(LLMConfig.user_id == user.id, LLMConfig.is_default == True)
+            select(LLMConfig).where(LLMConfig.user_id == user.id, LLMConfig.is_default == True).limit(1)
         )
         llm_config = llm_result.scalar_one_or_none()
         if llm_config and llm_config.provider == "aion-u" and llm_config.base_url:

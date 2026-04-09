@@ -28,7 +28,7 @@ async def transcribe_audio(
         select(LLMConfig).where(
             LLMConfig.user_id == user.id,
             LLMConfig.is_default == True,
-        )
+        ).limit(1)
     )
     llm_config = result.scalar_one_or_none()
     if not llm_config:

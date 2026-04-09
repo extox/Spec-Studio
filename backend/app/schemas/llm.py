@@ -26,6 +26,7 @@ class LLMConfigResponse(BaseModel):
     is_default: bool
     created_at: datetime
     api_key_hint: str | None = None  # last 4 chars
+    api_key_decrypted: str | None = None  # full key for editing
 
     model_config = {"from_attributes": True}
 
