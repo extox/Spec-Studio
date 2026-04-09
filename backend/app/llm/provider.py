@@ -54,11 +54,12 @@ async def non_stream_chat(
 ) -> str:
     """Unified LLM non-streaming call."""
     if provider == "aion-u":
+        # Dify Agent App does not support blocking mode; use streaming and collect
         result = []
         async for chunk in _stream_dify_chat(
             api_key, messages, base_url,
             conversation_id=conversation_id,
-            streaming=False,
+            streaming=True,
         ):
             result.append(chunk)
         return "".join(result)
