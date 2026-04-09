@@ -78,6 +78,6 @@ def get_template_content(template_id: str) -> str:
         return ""
     path = os.path.join(settings.BMAD_DATA_PATH, "templates", template["file_name"])
     if os.path.exists(path):
-        with open(path, "r") as f:
+        with open(path, "r", encoding="utf-8") as f:
             return f.read()
     return ""
