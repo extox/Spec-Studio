@@ -176,13 +176,22 @@ cd backend
 
 # 가상환경 생성 및 활성화
 python3 -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# macOS/Linux:
+source .venv/bin/activate
+
+# Windows PowerShell:
+# .venv\Scripts\Activate.ps1
+# (실행 정책 오류 시: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned)
+
+# Windows CMD:
+# .venv\Scripts\activate.bat
 
 # 의존성 설치
 pip install -r requirements.txt
 
 # 환경변수 설정
-cp .env.example .env
+cp .env.example .env        # Windows CMD: copy .env.example .env
 # .env 파일을 편집하여 JWT_SECRET_KEY, ENCRYPTION_KEY를 변경하세요
 ```
 
@@ -200,7 +209,7 @@ npm install
 **터미널 1 — 백엔드:**
 ```bash
 cd backend
-source .venv/bin/activate
+source .venv/bin/activate  # Windows PowerShell: .venv\Scripts\Activate.ps1
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
