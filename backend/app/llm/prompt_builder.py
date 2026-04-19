@@ -86,7 +86,10 @@ def build_system_prompt(
         "- Architecture → `planning-artifacts/architecture.md`\n"
         "- UX Spec → `planning-artifacts/ux-spec.md`\n"
         "- Epics → `planning-artifacts/epics.md`\n"
-        "- Story → `implementation-artifacts/story.md`\n"
+        "- Story → `implementation-artifacts/E{epicNum}-S{storyNum}-{story-slug}.md` "
+        "(e.g., `implementation-artifacts/E1-S3-user-login.md`). "
+        "ALWAYS use this dynamic naming — NEVER save as `story.md` (it would overwrite previous stories). "
+        "`story-slug` must be kebab-case, lowercase, English, derived from the story title.\n"
         "- Project Context → `planning-artifacts/project-context.md`\n"
         "- Sprint Status → `implementation-artifacts/sprint-status.md`\n"
     )

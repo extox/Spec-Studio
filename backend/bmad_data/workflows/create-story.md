@@ -94,7 +94,10 @@ Create a comprehensive, implementation-ready user story by exhaustively analyzin
 
 - Update sprint-status.yaml:
   - Mark story as "ready-for-dev"
-- Save story as project deliverable
+- Save story as project deliverable using the filename format:
+  `implementation-artifacts/E{epicNum}-S{storyNum}-{story-slug}.md`
+  (e.g., `implementation-artifacts/E1-S3-user-login.md`).
+  Each story MUST have a unique filename — NEVER save as `story.md`.
 - Present summary:
   - Story overview
   - Task count and complexity

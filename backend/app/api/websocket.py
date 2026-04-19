@@ -909,17 +909,22 @@ async def _auto_compile_deliverable(
 
     file_path, file_name = mapping
 
+    # Story template uses dynamic filename (E{epicNum}-S{storyNum}-{slug}.md)
+    # so we route saving through SAVE_FILE marker parsing instead of the static mapping.
+    is_story = template_id == "story"
+
     # Load BMad template
     template_content = get_template_content(template_id)
 
     # Notify user that compilation is starting
-    compile_msg = f"Workflow **{workflow['name']}** complete. Auto-generating **{file_name}**..."
+    compiling_label = "user story" if is_story else f"**{file_name}**"
+    compile_msg = f"Workflow **{workflow['name']}** complete. Auto-generating {compiling_label}..."
     await add_message(db, chat_session.id, "system", compile_msg)
     await db.commit()
 
     await manager.broadcast_all(chat_session.id, {
         "type": "deliverable_compiling",
-        "file_name": file_name,
+        "file_name": None if is_story else file_name,
         "message": compile_msg,
     })
 
@@ -936,6 +941,18 @@ async def _auto_compile_deliverable(
         f"- Remove any template instructions or comments\n"
         f"- Keep the document structure consistent with the template below\n"
     )
+
+    if is_story:
+        compile_prompt += (
+            "- Wrap the entire document with SAVE_FILE markers using a UNIQUE dynamic filename:\n"
+            "  `<!-- SAVE_FILE: implementation-artifacts/E{epicNum}-S{storyNum}-{story-slug}.md -->`\n"
+            "  followed by the document, followed by `<!-- END_FILE -->`.\n"
+            "  - `epicNum` / `storyNum`: integers inferred from the conversation (e.g., Epic 1, Story 3).\n"
+            "  - `story-slug`: kebab-case, lowercase English slug of the story title "
+            "(e.g., `user-login` for \"User Login\").\n"
+            "  - Example: `<!-- SAVE_FILE: implementation-artifacts/E1-S3-user-login.md -->`\n"
+            "  - NEVER use `story.md` — it would overwrite previous stories.\n"
+        )
 
     if template_content:
         compile_prompt += (
@@ -1041,18 +1058,36 @@ async def _auto_compile_deliverable(
     })
 
     # Auto-save to file (with version tracking)
-    await save_or_update_file(
-        db, chat_session.project_id, user_id,
-        file_path, file_name, full_content,
-        session_id=chat_session.id,
-        broadcast_session_id=chat_session.id,
-    )
-
-    await manager.broadcast_all(chat_session.id, {
-        "type": "workflow_complete",
-        "file_name": file_name,
-        "file_path": file_path,
-    })
+    if is_story:
+        # Story: dynamic filename driven by SAVE_FILE marker in the LLM output.
+        saved = SAVE_FILE_PATTERN.findall(full_content)
+        if saved:
+            await _parse_and_save_files(db, chat_session, full_content, user_id)
+            saved_path = saved[0][0].strip()
+            saved_name = saved_path.split("/")[-1]
+            await manager.broadcast_all(chat_session.id, {
+                "type": "workflow_complete",
+                "file_name": saved_name,
+                "file_path": saved_path,
+            })
+        else:
+            await manager.send_json(websocket, {
+                "type": "error",
+                "message": "Story deliverable missing SAVE_FILE marker — file not saved. "
+                           "Ask the persona to retry with the required filename format.",
+            })
+    else:
+        await save_or_update_file(
+            db, chat_session.project_id, user_id,
+            file_path, file_name, full_content,
+            session_id=chat_session.id,
+            broadcast_session_id=chat_session.id,
+        )
+        await manager.broadcast_all(chat_session.id, {
+            "type": "workflow_complete",
+            "file_name": file_name,
+            "file_path": file_path,
+        })
 
 
 async def handle_save_deliverable(
