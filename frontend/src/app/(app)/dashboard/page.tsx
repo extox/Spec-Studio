@@ -51,6 +51,7 @@ export default function DashboardPage() {
 
   const greeting = useMemo(() => {
     const hour = new Date().getHours();
+    if (hour < 6) return t("dashboard.goodNight");
     if (hour < 12) return t("dashboard.goodMorning");
     if (hour < 18) return t("dashboard.goodAfternoon");
     return t("dashboard.goodEvening");
