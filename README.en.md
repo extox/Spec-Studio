@@ -37,6 +37,31 @@ By combining these, we realize the SDD paradigm where **"Spec is both the starti
 
 ---
 
+## Screenshots
+
+### Dashboard — Project list & activity feed
+![Dashboard](./sample_images/Sample01.png)
+
+### AI Persona Chat — Step-by-step workflow execution (with A/P/C menu)
+![Persona Chat](./sample_images/Sample02.png)
+
+### Artifacts Tree — Phase-based directory grouping + version tracking
+![Artifacts Tree](./sample_images/Sample03.png)
+
+### Chat Sessions — Persona × workflow session management
+![Chat Sessions](./sample_images/Sample04.png)
+
+### Version Diff — Artifact change history with diff view + restore
+![Version Diff](./sample_images/Sample05.png)
+
+### System Architecture Canvas — Visual modeling on Xyflow + AI Review
+![System Architecture](./sample_images/Sample06.png)
+
+### Goal-Backward Traceability — PRD/ARCH/EPIC anchor graph
+![Traceability](./sample_images/Sample07.png)
+
+---
+
 ## Key Features
 
 ### SDD Workflows (12 types)

@@ -37,6 +37,31 @@
 
 ---
 
+## 스크린샷
+
+### 대시보드 — 프로젝트 목록 & 활동 피드
+![Dashboard](./sample_images/Sample01.png)
+
+### AI 페르소나 채팅 — 단계별 워크플로우 진행 (A/P/C 메뉴 포함)
+![Persona Chat](./sample_images/Sample02.png)
+
+### 산출물 트리 — Phase별 디렉토리 그룹화 + 버전 추적
+![Artifacts Tree](./sample_images/Sample03.png)
+
+### 채팅 세션 — 페르소나 × 워크플로우 단위 세션 관리
+![Chat Sessions](./sample_images/Sample04.png)
+
+### 버전 비교 — 산출물 변경 이력 Diff 뷰 + 복구
+![Version Diff](./sample_images/Sample05.png)
+
+### System Architecture 캔버스 — Xyflow 기반 시각 모델링 + AI Review
+![System Architecture](./sample_images/Sample06.png)
+
+### Goal-Backward Traceability — PRD/ARCH/EPIC 앵커 그래프
+![Traceability](./sample_images/Sample07.png)
+
+---
+
 ## 주요 기능
 
 ### SDD 워크플로우 (12종)
