@@ -361,7 +361,7 @@ cd backend
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `DATABASE_URL` | Database connection string | `sqlite+aiosqlite:///./web_bmad.db` |
+| `DATABASE_URL` | Database connection string | `sqlite+aiosqlite:///./spec_data.db` |
 | `JWT_SECRET_KEY` | JWT signing key (must change in production) | `dev-secret-key-change-in-production` |
 | `JWT_ALGORITHM` | JWT algorithm | `HS256` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Access Token expiration (minutes) | `30` |

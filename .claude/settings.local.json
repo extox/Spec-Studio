@@ -16,7 +16,8 @@
       "Bash(npx shadcn@latest init -d)",
       "Bash(npx shadcn@latest add card input label dialog dropdown-menu separator scroll-area avatar badge tabs textarea toast sheet select)",
       "Bash(npx shadcn@latest add card input label dialog dropdown-menu separator scroll-area avatar badge tabs textarea sheet select)",
-      "Bash(npx shadcn@latest add:*)"
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(uvicorn app.main:app --reload --host 0.0.0.0 --port 8000)"
     ]
   }
 }

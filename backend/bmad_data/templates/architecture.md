@@ -13,6 +13,17 @@ date: '{{date}}'
 **Version:** 1.0
 **Status:** Draft
 
+<!--
+Anchor Convention (for traceability):
+- Architecture decisions: ADR-001, ADR-002, ...
+- Components (in section 5.1): C-1, C-2, ... (use as section headings, e.g. "### C-1: API Gateway")
+- When an ADR or component derives from PRD requirements, append a derived_from marker
+  immediately after the heading, e.g.:
+    ### C-1: API Gateway
+    <!-- derived_from: PRD#FR-001, PRD#NFR-002 -->
+- IDs once assigned MUST NOT be renumbered.
+-->
+
 ---
 
 ## 1. Overview
@@ -92,7 +103,20 @@ date: '{{date}}'
 
 ## 5. System Architecture
 
-### 5.1 Component Diagram
+### 5.1 Components
+
+<!-- List major components using stable anchor IDs (C-1, C-2, ...). -->
+<!-- For each component, add a derived_from marker if it satisfies specific PRD requirements. -->
+
+#### C-1: {{Component Name}}
+
+<!-- derived_from: PRD#FR-001 -->
+
+- **Responsibility:**
+- **Tech:**
+- **Interfaces:**
+
+### 5.1.1 Component Diagram
 
 <!-- Describe major components and their relationships -->
 

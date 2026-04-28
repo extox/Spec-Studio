@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useProjectStore } from "@/stores/projectStore";
 import { FileTree } from "@/components/files/FileTree";
 import { FileViewer } from "@/components/files/FileViewer";
@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 
 export default function FilesPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const projectId = Number(params.projectId);
   const { files, fetchFiles } = useProjectStore();
   const [selectedFile, setSelectedFile] = useState<FileTreeItem | null>(null);
@@ -25,6 +26,15 @@ export default function FilesPage() {
   useEffect(() => {
     fetchFiles(projectId);
   }, [projectId, fetchFiles]);
+
+  // Auto-open the file when a deep link arrives via ?fileId=...
+  useEffect(() => {
+    const fid = Number(searchParams.get("fileId"));
+    if (!fid || !files.length) return;
+    if (selectedFile?.id === fid) return;
+    const found = files.find((f) => f.id === fid);
+    if (found) setSelectedFile(found);
+  }, [searchParams, files, selectedFile?.id]);
 
   const refresh = () => fetchFiles(projectId);
 

@@ -485,7 +485,7 @@ const en: Record<TranslationKey, string> = {
   // Context Expansion Management
   "nav.context": "Context",
   "nav.traceability": "Traceability",
-  "nav.bolts": "Bolts",
+  "nav.board": "Execution Board",
   "nav.orchestrate": "Orchestrate",
   "nav.validation": "Validation",
   "contextMgmt.title": "Context",
@@ -668,6 +668,7 @@ const en: Record<TranslationKey, string> = {
   "trace.deleteFail": "Delete failed",
   "trace.rebuildAllOk": "Rebuilt: {count} explicit links across project",
   "trace.filter": "Filter:",
+  "trace.totalAnchorsHint": "Total anchors in this project (same denominator used by validation score)",
   "trace.focusOn": "Focus:",
   "trace.clearFocus": "Clear focus",
   "trace.focusDepth": "Depth: {n} hop(s)",
@@ -680,6 +681,10 @@ const en: Record<TranslationKey, string> = {
   "trace.openFile": "Open file",
   "trace.collapse": "Collapse",
   "trace.expand": "Expand",
+  "trace.sidePanelLabel": "Details",
+  "trace.collapseSidePanel": "Collapse details panel",
+  "trace.expandSidePanel": "Expand details panel",
+  "trace.fitAll": "Fit all",
   "trace.orphanHint": "Anchors not connected to anything. Quality signal similar to a linter's 'unused variable' — add a derived_from marker or split it into a Story.",
   "trace.searchPlaceholder": "Search anchors (e.g. FR-0, C-1)",
   "trace.searchClear": "Clear search",
@@ -692,7 +697,41 @@ const en: Record<TranslationKey, string> = {
   "trace.showOrphansToggle": "Include orphans",
   "trace.showOrphansHint": "Show anchors that aren't part of any link in the graph.",
 
-  // ─── Bolts (P2) ───────────────────────────────────────────────────────
+  // ─── Story Execution Board (Story kanban) ────────────────────────────
+  "board.title": "Execution Board",
+  "board.subtitle": "Track Story progress on a kanban. Drag cards across columns to change status.",
+  "board.totalStories": "Total stories",
+  "board.reload": "Refresh",
+  "board.empty": "Empty",
+  "board.col.todo": "Todo",
+  "board.col.in_progress": "In progress",
+  "board.col.review": "Review",
+  "board.col.done": "Done",
+  "board.col.blocked": "Blocked",
+  "board.moveTo": "Move to {status}",
+  "board.moveOk": "{id} → {status}",
+  "board.moveFail": "Status update failed",
+  "board.loadFailed": "Failed to load board",
+  "board.generateAll": "Generate all stories",
+  "board.generating": "Generating...",
+  "board.generateOk": "Created {created} story files (skipped {skipped}, failed {failed})",
+  "board.generateNoneNeeded": "Nothing to generate ({skipped} already exist)",
+  "board.generateError": "Cannot generate: {reason}",
+  "board.generateFailed": "Generate-all request failed",
+  "board.generateProgress": "In progress... ({done} created)",
+  "board.generateByEpic": "Generate by Epic",
+  "board.preview": "Preview",
+  "board.edit": "Edit",
+  "board.delete": "Delete",
+  "board.openInEditor": "Open in editor",
+  "board.previewLoading": "Loading...",
+  "board.previewEmpty": "Content is empty.",
+  "board.previewFailed": "Failed to load preview",
+  "board.deleteConfirm": "Delete story {id} {title}? (File will be permanently removed)",
+  "board.deleteOk": "{id} deleted",
+  "board.deleteFailed": "Delete failed",
+
+  // ─── Bolts (deprecated — kept for legacy refs) ────────────────────────
   "bolt.title": "Bolts",
   "bolt.subtitle": "Short, intense work cycles (1–3h) derived from the current sprint.",
   "bolt.last7Days": "Last 7 days",
@@ -739,8 +778,13 @@ const en: Record<TranslationKey, string> = {
 
   // ─── Validation (P4) ──────────────────────────────────────────────────
   "valid.title": "Validation",
-  "valid.specHealth": "Spec Status",
-  "valid.openIssues": "{count} open issue(s)",
+  "valid.specHealth": "Engine Result (actual)",
+  "valid.openIssues": "{count} open issue(s) detected by engine",
+  "valid.labelSection": "User Labels (artifacts unchanged)",
+  "valid.labelAck": "Ack {count}",
+  "valid.labelResolved": "Resolved {count}",
+  "valid.labelSuppressed": "Suppressed {count}",
+  "valid.labelHint": "These labels only re-organize the view — they do NOT modify any artifact file. Real fixes appear after you edit the artifact and click 'Run validation' again.",
   "valid.statusFilter": "Status:",
   "valid.statusOpen": "Open",
   "valid.statusAcknowledged": "Acknowledged",
@@ -752,7 +796,9 @@ const en: Record<TranslationKey, string> = {
   "valid.suppressed": "Marked as suppressed",
   "valid.reopened": "Reopened",
   "valid.reopen": "Reopen",
-  "valid.scoreNote": "Score reflects the last validation run. To refresh after triaging issues, click 'Run validation' again.",
+  "valid.scoreNote": "Score = 100 × (1 − affected anchors ÷ total anchors). Weights: error=1.0, warning=0.5, info=0.25. Based on open issues at the last run.",
+  "valid.scoreFormulaToggle": "Formula & run info",
+  "valid.anchorsTotal": "Denominator: {total} total anchors in this project.",
   "valid.noRunYet": "No validation run yet.",
   "valid.runMeta": "{rules} rules · {ms}ms",
   "valid.triggered": "Triggered: {by} · {when}",
@@ -768,7 +814,146 @@ const en: Record<TranslationKey, string> = {
   "valid.severityInfo": "info",
   "valid.loading": "Loading...",
   "valid.noIssues": "No open issues 🎉",
-  "valid.ack": "Ack",
+  "valid.resultCount": "{count} result(s)",
+  "valid.openFile": "Artifact",
+  "valid.openInArtifacts": "Open artifact",
+  "valid.openInTrace": "Trace graph",
+  "valid.preview": "Preview",
+  "valid.previewFailed": "Failed to load artifact preview",
+  "valid.noPreview": "This issue is not linked to any artifact.",
+  "valid.prev": "Prev",
+  "valid.next": "Next",
+
+  // Rule message templates — uses {anchor}, {related}
+  "valid.rule.fr_covered_by_story.message":
+    "FR `{anchor}` in PRD has no Story covering it.",
+  "valid.rule.fr_covered_by_story.suggestion":
+    "Create a Story whose `derived_from` marker references `PRD#{anchor}`, or mark the FR as deferred.",
+  "valid.rule.fr_covered_by_story.no_story_files.message":
+    "No Story files exist in `implementation-artifacts/`. Stories described inside `epic.md` are NOT detected by validation — each story must live in its own file (`E{n}-S{n}-{slug}.md`).",
+  "valid.rule.fr_covered_by_story.no_story_files.suggestion":
+    "Run the 'Create Story' workflow for each story listed in epic.md to generate per-story files (with `derived_from: PRD#FR-xxx` markers). 'Create Epics & Stories' alone only outlines stories inside epic.md.",
+  "valid.rule.nfr_referenced_in_architecture.message":
+    "NFR `{anchor}` is not referenced from the Architecture.",
+  "valid.rule.nfr_referenced_in_architecture.suggestion":
+    "Reference NFR `{anchor}` from an Architecture component (C-#) or an ADR.",
+  "valid.rule.ux_flow_aligned_with_journey.message":
+    "User flow `{anchor}` is not linked to any PRD User Journey (UJ-).",
+  "valid.rule.ux_flow_aligned_with_journey.suggestion":
+    "Add `derived_from: PRD#UJ-...` to the UX flow, or create the matching User Journey in the PRD.",
+  "valid.rule.orphan_anchor.message":
+    "Anchor `{anchor}` is not connected to any other artifact.",
+  "valid.rule.orphan_anchor.suggestion":
+    "Add a `derived_from` marker linking this anchor to upstream/downstream artifacts, or remove it if no longer needed.",
+  "valid.rule.estimation_sanity.suggestion":
+    "Consider splitting the epic or revising the story-point estimates.",
+
+  // Rule names + descriptions (for the rules info popover)
+  "valid.rulesInfo": "View all 6 rules",
+  "valid.rulesListTitle": "Validation rules (6)",
+  "valid.rule.fr_covered_by_story.name": "FR ↔ Story coverage",
+  "valid.rule.fr_covered_by_story.desc":
+    "Verifies every functional requirement (FR) in the PRD is covered by at least one Story.",
+  "valid.rule.nfr_referenced_in_architecture.name": "NFR ↔ Architecture reference",
+  "valid.rule.nfr_referenced_in_architecture.desc":
+    "Verifies non-functional requirements (NFRs) are referenced from an Architecture component or ADR.",
+  "valid.rule.ux_flow_aligned_with_journey.name": "UX Flow ↔ User Journey alignment",
+  "valid.rule.ux_flow_aligned_with_journey.desc":
+    "Verifies UX user flows are linked to a PRD User Journey (UJ-).",
+  "valid.rule.orphan_anchor.name": "Orphan anchor detection",
+  "valid.rule.orphan_anchor.desc":
+    "Surfaces anchors that are neither the source nor the target of any traceability link.",
+  "valid.rule.estimation_sanity.name": "Story-point sanity",
+  "valid.rule.estimation_sanity.desc":
+    "Flags Epics whose child Story-point sum diverges substantially from the Epic complexity.",
+  "valid.rule.contradictory_terms.name": "Contradictory terms (LLM)",
+  "valid.rule.contradictory_terms.desc":
+    "An LLM reads PRD and Architecture together and surfaces semantically contradictory statements.",
+
+  // Resolution guide — step-by-step actions
+  "guide.title": "Resolution guide",
+  "guide.expand": "Expand for details",
+  "guide.collapse": "Collapse",
+  "guide.afterFix":
+    "Saving the artifact triggers an automatic re-validation; issues with the same fingerprint are auto-closed as resolved.",
+  "guide.openPRD": "Open PRD",
+  "guide.openUX": "Open UX spec",
+  "guide.openARCH": "Open Architecture",
+  "guide.openEPIC": "Open Epic",
+  "guide.openStoryFolder": "Open implementation-artifacts folder",
+  "guide.openArtifact": "Open artifact",
+  "guide.openInTrace": "View in trace graph",
+
+  "guide.fr_covered_by_story.step1":
+    "Open the PRD and re-read FR `{anchor}` — its requirement body, acceptance criteria, and priority — so you know exactly what behavior must be implemented.",
+  "guide.fr_covered_by_story.step2":
+    "Find an existing Epic in implementation-artifacts/ that should own this FR, or create a new one (e.g. `epic-customer-onboarding.md`).",
+  "guide.fr_covered_by_story.step3":
+    "Create a new Story file inside that Epic and add a derived_from marker in the header — this is the metadata the engine tracks.",
+  "guide.fr_covered_by_story.step4":
+    "Write BDD-style acceptance criteria (Given/When/Then) in the Story body and assign story points.",
+  "guide.fr_covered_by_story.altDeferred":
+    "Alternative: if you have decided not to ship FR `{anchor}` this release, mark it `(deferred)` in the PRD or change its Priority to 'Won't'. Validation will then ignore it.",
+
+  "guide.nfr_referenced_in_architecture.step1":
+    "Open the PRD and confirm the quantitative target of NFR `{anchor}` (e.g. 'response time ≤ 200ms p95', '99.9% uptime').",
+  "guide.nfr_referenced_in_architecture.step2":
+    "Open the Architecture artifact and identify the component (C-#) responsible for meeting this NFR. If none exists, you may need to add one.",
+  "guide.nfr_referenced_in_architecture.step3":
+    "Reference the NFR anchor explicitly inside that component's description or in an `Addresses:` line.",
+  "guide.nfr_referenced_in_architecture.altADR":
+    "Alternative: if the decision satisfying this NFR lives in an ADR, reference the NFR from the ADR body instead.",
+
+  "guide.ux_flow_aligned_with_journey.step1":
+    "Open the UX Spec and verify what user scenario User Flow `{anchor}` is describing.",
+  "guide.ux_flow_aligned_with_journey.step2":
+    "Check the PRD's 'User Journeys' section for a UJ-### entry that covers the same/similar scenario.",
+  "guide.ux_flow_aligned_with_journey.step3":
+    "If one exists, add a derived_from marker to the UX flow header.",
+  "guide.ux_flow_aligned_with_journey.altCreateUJ":
+    "Alternative: if no matching User Journey exists, open the PRD and create a new UJ-### (name, trigger, key steps) so PRD and UX align in both directions.",
+
+  "guide.orphan_anchor.step1":
+    "Search for anchor `{anchor}` in the trace graph to visually confirm it really has no incoming or outgoing links.",
+  "guide.orphan_anchor.expects.UJ":
+    "A UJ (User Journey) is defined in the PRD and is normally consumed by a **User Flow (UF-###) in the UX spec** via `derived_from: PRD#UJ-###`. If no UF references it, add one in the UX spec.",
+  "guide.orphan_anchor.expects.FR":
+    "An FR (Functional Requirement) is normally consumed by a **separate Story file (`E{n}-S{n}-...md`)** via `derived_from: PRD#FR-###`. The story description inside epic.md does NOT count — a per-story file in `implementation-artifacts/` is required.",
+  "guide.orphan_anchor.expects.NFR":
+    "An NFR (Non-Functional Requirement) is normally referenced by **a Component (C-###) or an ADR in Architecture** via an 'Addresses: PRD#NFR-###' line.",
+  "guide.orphan_anchor.expects.UF":
+    "A UF (User Flow) is defined in the UX spec and normally links back to a PRD User Journey via `derived_from: PRD#UJ-###` in its header.",
+  "guide.orphan_anchor.expects.C":
+    "A Component (C-###) is defined in Architecture and normally references PRD FR/NFR anchors in its body or 'Addresses' line to declare which requirements it owns.",
+  "guide.orphan_anchor.expects.ADR":
+    "An ADR (Architecture Decision Record) normally references PRD NFR/FR anchors or Architecture Components (C-###) in its Context/Decision body to anchor the rationale.",
+  "guide.orphan_anchor.expects.E":
+    "An Epic (E-###) is defined in epic.md and normally references the PRD FR-### anchors it covers, in a 'Covers' line or in body text.",
+  "guide.orphan_anchor.expects.S":
+    "A Story (S-###) normally references EPIC#E-### or PRD#FR-### in its `derived_from` header. Add the marker if it's missing.",
+  "guide.orphan_anchor.expects.default":
+    "If this anchor is *derived from* an upstream artifact, add the derived_from marker to its header. Conversely, if a downstream artifact should derive from it, create that artifact or add the marker there.",
+  "guide.orphan_anchor.step3":
+    "Open the artifact suggested above and add a marker like:",
+  "guide.orphan_anchor.altRemove":
+    "Alternative: if `{anchor}` is dead and no longer meaningful, delete the row from the artifact. The engine will auto-close the issue as resolved.",
+
+  "guide.estimation_sanity.step1":
+    "Open the related Epic artifact and re-check its 'Complexity' or 'Size' label vs. the sum of child Story points.",
+  "guide.estimation_sanity.step2":
+    "If Epic complexity is low but story points are large: split the Epic in two, or move some Stories to a separate Epic.",
+  "guide.estimation_sanity.step3":
+    "Conversely, if Epic complexity is high but story points are too small: review for missing scenarios / edge cases and add Stories.",
+
+  "guide.contradictory_terms.step1":
+    "Re-read the two statements the LLM flagged (e.g. PRD's 'real-time processing' vs. Architecture's '5-minute batch') and decide whether they are truly contradictory.",
+  "guide.contradictory_terms.step2":
+    "View both anchors side by side in the trace graph to confirm they aren't simply using the same word in different contexts.",
+  "guide.contradictory_terms.step3":
+    "If it's a genuine contradiction, fix one side (we recommend deferring to business intent) or write an ADR explaining under what conditions both can coexist.",
+  "guide.contradictory_terms.note":
+    "Note: this is an LLM rule and may produce false positives. If you judge it not to be a contradiction, just suppress the issue.",
+  "valid.ack": "Acknowledge",
   "valid.resolve": "Resolve",
   "valid.suppress": "Suppress",
   "valid.loadFailed": "Failed to load issues",

@@ -9,6 +9,16 @@ project_name: '{{project_name}}'
 **Date:** {{date}}
 **Status:** Draft
 
+<!--
+Anchor Convention (for traceability):
+- Epics: E-001, E-002, ... (or E1, E2)
+- Stories: S-001, S-002, ... or per-epic E1-S1, E1-S2
+- Each Epic/Story should declare which FRs it covers via a derived_from marker
+  placed under its heading:
+    ## Epic 1: User Auth (E-001)
+    <!-- derived_from: PRD#FR-001, PRD#FR-002, PRD#NFR-003 -->
+-->
+
 ---
 
 ## Requirements Inventory
@@ -41,7 +51,9 @@ project_name: '{{project_name}}'
 
 ---
 
-## Epic 1: {{Epic Title}}
+## Epic 1: {{Epic Title}} (E-001)
+
+<!-- derived_from: PRD#FR-001 -->
 
 **ID:** E-001
 **Priority:** Must-Have

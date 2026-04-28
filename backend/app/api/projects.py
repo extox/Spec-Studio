@@ -18,12 +18,22 @@ from app.api.members import router as members_router
 from app.api.files import router as files_router
 from app.api.chat import router as chat_router
 from app.api.context import router as context_router
+from app.api.traceability import router as traceability_router
+from app.api.bolts import router as bolts_router
+from app.api.story_board import router as story_board_router
+from app.api.orchestrate import router as orchestrate_router
+from app.api.validation import router as validation_router
 
 router = APIRouter()
 router.include_router(members_router, prefix="/{project_id}/members", tags=["members"])
 router.include_router(files_router, prefix="/{project_id}/files", tags=["files"])
 router.include_router(chat_router, prefix="/{project_id}/chat", tags=["chat"])
 router.include_router(context_router, prefix="/{project_id}/context", tags=["context"])
+router.include_router(traceability_router, prefix="/{project_id}/traceability", tags=["traceability"])
+router.include_router(bolts_router, prefix="/{project_id}/bolts", tags=["bolts"])
+router.include_router(story_board_router, prefix="/{project_id}/story-board", tags=["story-board"])
+router.include_router(orchestrate_router, prefix="/{project_id}/orchestrate", tags=["orchestrate"])
+router.include_router(validation_router, prefix="/{project_id}/validation", tags=["validation"])
 
 
 @router.get("", response_model=list[ProjectResponse])

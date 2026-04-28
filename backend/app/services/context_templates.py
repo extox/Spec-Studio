@@ -26,8 +26,79 @@ boundaries:
     children: []
 """
 
+_TECH_STACK_TEMPLATE = """\
+# ===== 기술 스택 (Tech Stack) =====
+# Construction 워크플로우(코드 스캐폴딩, 테스트, CI, IaC)가 항상 우선 참조합니다.
+
+# [필수] 주 사용 언어 (e.g. Python 3.12, TypeScript 5.4, Java 21)
+language: ""
+
+# [필수] 프레임워크 목록 (Backend / Frontend 명시)
+frameworks:
+  backend: ""             # 예: FastAPI, Spring Boot, Django, NestJS
+  frontend: ""            # 예: Next.js 14, React 18, Vue 3
+  mobile: ""              # 선택: React Native, Flutter
+
+# [선택] 데이터 저장소
+datastores:
+  primary_db: ""          # 예: PostgreSQL 16
+  cache: ""               # 예: Redis 7
+  search: ""              # 예: OpenSearch
+  object_store: ""        # 예: S3 / GCS / Azure Blob
+
+# [선택] 메시징/큐
+messaging: ""             # 예: Kafka, RabbitMQ, SQS
+
+# [선택] 클라우드 / 호스팅
+cloud:
+  provider: ""            # aws | gcp | azure | on-prem | multi
+  regions: []
+  managed_services: []    # 예: ECS, Cloud Run, Lambda
+
+# [선택] 인증 / 인가
+auth:
+  provider: ""            # 예: Auth0, Cognito, custom JWT
+  protocols: []           # 예: OAuth2, OIDC, SAML
+
+# [선택] 관측성
+observability:
+  logs: ""                # 예: CloudWatch, Datadog
+  metrics: ""             # 예: Prometheus
+  traces: ""              # 예: OpenTelemetry, Jaeger
+
+# [선택] CI/CD
+cicd:
+  vendor: ""              # 예: github-actions, gitlab-ci, jenkins
+  artifact_registry: ""
+
+# [선택] 테스트 도구
+testing:
+  unit: ""                # 예: pytest, jest
+  integration: ""
+  e2e: ""                 # 예: playwright, cypress
+  coverage_min: 70
+
+# [선택] 코드 컨벤션
+conventions:
+  style_guide: ""         # 예: PEP8, Airbnb JS, Google Java
+  linter: ""
+  formatter: ""
+
+# [선택] 보안 정책
+security:
+  secret_store: ""        # 예: AWS Secrets Manager, HashiCorp Vault
+  scanning: []            # 예: SCA, SAST, container scan
+
+# [선택] 라이선스 정책 (허용/금지)
+licenses:
+  allow: ["MIT", "Apache-2.0", "BSD-3-Clause"]
+  deny: ["GPL-3.0", "AGPL-3.0"]
+"""
+
+
 CONTEXT_TEMPLATES: dict[str, str] = {
     "system-architecture": _SYSTEM_ARCH_TEMPLATE,
+    "tech-stack": _TECH_STACK_TEMPLATE,
     "legacy-system": """\
 # ===== 레거시 시스템 모델 =====
 # [필수] 기본 정보

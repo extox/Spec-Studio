@@ -9,6 +9,9 @@ from app.models.file_version import FileVersion
 from app.models.activity_log import ActivityLog
 from app.models.login_history import LoginHistory
 from app.models.guide import GuidePage
+from app.models.traceability_link import TraceabilityLink
+from app.models.bolt import Bolt, BoltActivity
+from app.models.validation import ValidationRun, ValidationIssue
 
 __all__ = [
     "User",
@@ -22,4 +25,9 @@ __all__ = [
     "ActivityLog",
     "LoginHistory",
     "GuidePage",
+    "TraceabilityLink",
+    "Bolt",
+    "BoltActivity",
+    "ValidationRun",
+    "ValidationIssue",
 ]

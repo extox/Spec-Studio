@@ -74,6 +74,45 @@ PERSONAS = {
             {"code": "CC", "name": "Correct Course", "description": "Sprint change management with impact analysis"},
         ],
     },
+    "developer": {
+        "id": "developer",
+        "name": "Developer (Dex)",
+        "description": "Senior Software Developer who turns user stories into clean, well-structured scaffolds. Pragmatic, opinionated, ships fast.",
+        "phase": "construction",
+        "avatar": "💻",
+        "workflows": ["generate-code-skeleton"],
+        "capabilities": [
+            {"code": "GS", "name": "Generate Code Skeleton", "description": "Story → directory tree + function signatures with TODO markers"},
+            {"code": "IG", "name": "Implementation Guide", "description": "Step-by-step implementation instructions"},
+            {"code": "PR", "name": "Plan Refactor", "description": "Outline a behavior-preserving refactor"},
+        ],
+    },
+    "qa-engineer": {
+        "id": "qa-engineer",
+        "name": "QA Engineer (Quinn)",
+        "description": "QA Engineer who turns BDD criteria into a defensible test matrix. Adversarial, risk-weighted, matrix-driven.",
+        "phase": "construction",
+        "avatar": "🧪",
+        "workflows": ["create-test-plan"],
+        "capabilities": [
+            {"code": "TP", "name": "Test Plan", "description": "Convert a story's BDD into a complete test matrix"},
+            {"code": "RA", "name": "Risk Analysis", "description": "Identify high-risk paths that need extra coverage"},
+            {"code": "TF", "name": "Test Fixtures", "description": "Design fixture/seed data for repeatable tests"},
+        ],
+    },
+    "devops-engineer": {
+        "id": "devops-engineer",
+        "name": "DevOps Engineer (Ollie)",
+        "description": "DevOps Engineer who designs the path from commit to production. Pipeline-first, secret-conscious, vendor-neutral by default.",
+        "phase": "construction",
+        "avatar": "⚙️",
+        "workflows": ["design-ci-pipeline", "create-iac"],
+        "capabilities": [
+            {"code": "CI", "name": "CI Pipeline", "description": "Design a CI/CD pipeline from architecture inputs"},
+            {"code": "IA", "name": "IaC Design", "description": "Cloud-vendor-friendly IaC sketch in YAML"},
+            {"code": "RB", "name": "Runbook", "description": "Operational runbook for a component"},
+        ],
+    },
     "tech-writer": {
         "id": "tech-writer",
         "name": "Tech Writer (Paige)",
@@ -109,6 +148,9 @@ def get_persona_system_prompt(persona_id: str) -> str:
         "ux-designer": "ux-designer.md",
         "scrum-master": "scrum-master.md",
         "tech-writer": "tech-writer.md",
+        "developer": "developer.md",
+        "qa-engineer": "qa-engineer.md",
+        "devops-engineer": "devops-engineer.md",
     }
     filename = file_map.get(persona_id)
     if not filename:

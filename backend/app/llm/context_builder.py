@@ -24,6 +24,11 @@ WORKFLOW_PRIORITY = {
     "create-epics": ["PRD", "architecture", "ux-spec"],
     "sprint-planning": ["epics", "sprint-status", "PRD"],
     "create-story": ["epics", "sprint-status", "PRD", "architecture", "ux-spec"],
+    "goal-backward-analysis": ["PRD", "product-brief"],
+    "generate-code-skeleton": ["story", "architecture", "PRD"],
+    "create-test-plan": ["story", "PRD", "ux-spec"],
+    "design-ci-pipeline": ["architecture", "PRD"],
+    "create-iac": ["architecture", "PRD"],
 }
 
 # File name patterns for matching priority keywords

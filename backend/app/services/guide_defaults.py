@@ -374,4 +374,250 @@ DEFAULT_GUIDE_PAGES = [
 </ul>""",
         "content_en": "<h1>BMad Method Philosophy</h1><p>AI-Driven Development with persona-based expertise, workflows, context chaining, and human-centered decisions.</p>",
     },
+    # ─── 고급 기능 (Phase 1~4 추가 기능) ─────────────────────────────────────
+    {
+        "slug": "traceability",
+        "title": "추적 — Goal-Backward 추적",
+        "group_name": "고급 기능",
+        "sort_order": 11,
+        "content_ko": """<h1>추적 — Goal-Backward 추적</h1>
+<p>PRD의 모든 요구사항(FR/NFR/UJ)이 Architecture 컴포넌트, UX Flow, Epic, Story, 코드 스캐폴딩까지 어떻게 흘러갔는지 시각적으로 추적합니다.</p>
+
+<h2>핵심 개념</h2>
+<table>
+<thead><tr><th>개념</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td><strong>앵커(Anchor)</strong></td><td>산출물 안의 안정적 ID. 한번 부여하면 절대 변경하지 않음.</td></tr>
+<tr><td><strong>derived_from 마커</strong></td><td>HTML 주석으로 "이 항목이 어디서 파생되었는지" 선언</td></tr>
+<tr><td><strong>Traceability Link</strong></td><td>두 앵커 사이의 directional 관계 (source → target)</td></tr>
+<tr><td><strong>Origin</strong></td><td><code>explicit</code>(마커 기반) · <code>suggested</code>(LLM 추론) · <code>manual</code>(사용자 직접)</td></tr>
+</tbody>
+</table>
+
+<h2>앵커 컨벤션</h2>
+<ul>
+<li><strong>PRD:</strong> <code>FR-001</code> (FR), <code>NFR-001</code> (NFR), <code>UJ-001</code> (User Journey)</li>
+<li><strong>Architecture:</strong> <code>ADR-001</code> (의사결정), <code>C-1</code> (컴포넌트, 섹션 헤더로 사용)</li>
+<li><strong>UX Spec:</strong> <code>UF-001</code> (User Flow), <code>CMP-001</code> (UI 컴포넌트)</li>
+<li><strong>Epics:</strong> <code>E-001</code></li>
+<li><strong>Stories:</strong> <code>S-001</code> 또는 <code>E1-S3</code> 형식</li>
+</ul>
+
+<h2>derived_from 마커 사용법</h2>
+<pre><code>### C-1: API Gateway
+&lt;!-- derived_from: PRD#FR-001, PRD#NFR-002 --&gt;
+- Responsibility: routing
+- Tech: FastAPI</code></pre>
+<p>마커 위 가장 가까운 앵커가 source가 됩니다. 컴마로 여러 target 지정 가능.</p>
+
+<h2>자동 동작</h2>
+<ol>
+<li>아티팩트가 저장되면 백그라운드에서 derived_from 마커를 파싱</li>
+<li>traceability_links 테이블에 자동 영속</li>
+<li>Traceability 페이지의 ReactFlow 그래프에 즉시 반영</li>
+</ol>
+
+<h2>UI 사용법</h2>
+<ol>
+<li>좌측 사이드바 → <strong>추적</strong> 클릭</li>
+<li>그래프에서 노드 클릭 → 우측 패널에 해당 파일의 anchor / 상위 / 하위 링크</li>
+<li><strong>Suggest (AI)</strong> 버튼: LLM이 누락된 derived_from을 추론</li>
+<li><strong>Rebuild</strong> 버튼: 단일 파일 또는 전체 프로젝트 재구축</li>
+<li>우측 하단 <strong>Orphan anchors</strong>: 어디에도 연결되지 않은 앵커 목록</li>
+</ol>
+
+<h2>관련 워크플로우</h2>
+<p><strong>Goal-Backward Analysis</strong> — 목표를 검증 가능한 전제조건으로 역분해하고 PRD FR로 매핑하는 6단계 워크플로우. Analyst 페르소나 사용.</p>""",
+        "content_en": "<h1>Traceability — Goal-Backward</h1><p>Track how PRD requirements flow into Architecture, UX, Stories, and code scaffolds via stable anchors and derived_from markers.</p>",
+    },
+    {
+        "slug": "construction",
+        "title": "Construction — 코드 스캐폴딩 / 테스트 / CI / IaC",
+        "group_name": "고급 기능",
+        "sort_order": 12,
+        "content_ko": """<h1>Construction Phase</h1>
+<p>Story가 만들어진 후, 실제 구현으로 이어지는 4가지 산출물을 AI가 생성합니다. 모든 산출물은 <code>construction-artifacts/</code> 디렉토리에 저장되며 P0 traceability 마커를 자동 포함합니다.</p>
+
+<h2>3 신규 페르소나</h2>
+<table>
+<thead><tr><th>페르소나</th><th>역할</th><th>워크플로우</th></tr></thead>
+<tbody>
+<tr><td>💻 Dex (Developer)</td><td>Story → 디렉토리 트리 + 함수 시그니처</td><td>Generate Code Skeleton</td></tr>
+<tr><td>🧪 Quinn (QA Engineer)</td><td>BDD → 테스트 매트릭스 + 부정 케이스 + 픽스처</td><td>Create Test Plan</td></tr>
+<tr><td>⚙️ Ollie (DevOps Engineer)</td><td>Architecture → CI/CD + IaC</td><td>Design CI Pipeline · Create IaC</td></tr>
+</tbody>
+</table>
+
+<h2>4 신규 워크플로우</h2>
+<ol>
+<li><strong>Generate Code Skeleton</strong> (5단계, Developer)
+  <ul><li>Story 로드 → 파일 트리 → 함수 시그니처(no body) → BDD 시나리오에 묶인 TODO → 저장</li>
+  <li>출력: <code>construction-artifacts/E{n}-S{n}-skeleton.md</code></li></ul>
+</li>
+<li><strong>Create Test Plan</strong> (6단계, QA Engineer)
+  <ul><li>BDD 추출 → unit/integration/e2e 분류 → 부정 케이스 → 픽스처/모크 → 위험 → 저장</li>
+  <li>출력: <code>construction-artifacts/E{n}-S{n}-test-plan.md</code></li></ul>
+</li>
+<li><strong>Design CI Pipeline</strong> (5단계, DevOps Engineer)
+  <ul><li>Architecture + tech-stack 로드 → 트리거 → 스테이지 → 품질 게이트 → 저장</li>
+  <li>출력: <code>construction-artifacts/ci-pipeline.yaml</code> (벤더 중립)</li></ul>
+</li>
+<li><strong>Create IaC</strong> (6단계, DevOps Engineer)
+  <ul><li>Architecture 로드 → 리소스 인벤토리 → 의존성 → 네트워크 → 시크릿 → 저장</li>
+  <li>출력: <code>construction-artifacts/iac.yaml</code></li></ul>
+</li>
+</ol>
+
+<h2>tech-stack 컨텍스트</h2>
+<p>Construction 워크플로우는 <strong>tech-stack</strong> 카테고리의 컨텍스트 YAML을 항상 우선 참조합니다. 컨텍스트 메뉴에서 "기술 스택" 카테고리를 선택하여 다음을 선언합니다:</p>
+<ul>
+<li>주 사용 언어/버전</li>
+<li>Backend/Frontend 프레임워크</li>
+<li>DB · 캐시 · 검색 · 스토리지</li>
+<li>클라우드 vendor와 managed services</li>
+<li>CI/CD vendor</li>
+<li>테스트 도구 + 커버리지 최소</li>
+<li>코드 컨벤션 + 보안 정책 + 라이선스</li>
+</ul>
+
+<h2>traceability와의 통합</h2>
+<p>Construction 산출물은 자동으로 <code>derived_from: STORY#E{n}-S{n}, ARCH#C-1</code> 마커를 포함하여 저장 즉시 traceability 그래프에 연결됩니다.</p>""",
+        "content_en": "<h1>Construction Phase</h1><p>3 personas (Developer, QA, DevOps) and 4 workflows (skeleton, test plan, CI, IaC) extend the lifecycle from spec to code-ready artifacts.</p>",
+    },
+    {
+        "slug": "bolts",
+        "title": "Bolts — 단기 실행 사이클",
+        "group_name": "고급 기능",
+        "sort_order": 13,
+        "content_ko": """<h1>Bolts — 단기 실행 사이클</h1>
+<p>AWS AI-DLC의 "Bolt" 컨셉을 차용하여, Sprint를 1~3시간짜리 짧고 강도 높은 실행 단위로 분해합니다. 각 Bolt는 시작/완료/승인 라이프사이클을 가지며 모든 활동이 자동 기록됩니다.</p>
+
+<h2>Bolt 라이프사이클</h2>
+<pre><code>todo  ──Start──▶  in_bolt  ──Complete──▶  awaiting_approval  ──Approve──▶  done
+                      │                                                         ▲
+                      └─────────────Block────────────▶  blocked  ──Unblock──────┘</code></pre>
+
+<h2>주요 동작</h2>
+<table>
+<thead><tr><th>동작</th><th>효과</th></tr></thead>
+<tbody>
+<tr><td><strong>Plan from Sprint</strong></td><td>Sprint Status YAML을 LLM이 분해하여 Story당 skeleton + test plan Bolt 자동 생성</td></tr>
+<tr><td><strong>Start</strong></td><td>한 Bolt만 활성. 다른 Bolt가 in_bolt면 차단. started_at 기록.</td></tr>
+<tr><td><strong>Complete</strong></td><td>approval_required면 awaiting_approval, 아니면 바로 done</td></tr>
+<tr><td><strong>Approve</strong></td><td>approved_by + approved_at 기록 → done</td></tr>
+<tr><td><strong>Block</strong></td><td>blocker_reason 필수 입력</td></tr>
+</tbody>
+</table>
+
+<h2>자동 활동 기록</h2>
+<p>활성 Bolt가 있는 동안 발생하는 모든 파일 저장은 <code>bolt_activities</code>에 <code>file_saved</code> 이벤트로 자동 기록됩니다. 모든 상태 전이도 <code>status_change</code> 이벤트로 기록되어 감사 추적이 가능합니다.</p>
+
+<h2>UI 사용법</h2>
+<ol>
+<li>좌측 사이드바 → <strong>볼트</strong></li>
+<li>5컬럼 칸반: To Do · In Bolt · Awaiting Approval · Done · Blocked</li>
+<li>상단 <strong>Plan from Sprint</strong> 버튼으로 Sprint를 자동 분해 (Sprint Status 파일 + LLM 설정 필요)</li>
+<li>각 카드의 액션 버튼으로 상태 전이</li>
+<li>상단 우측에 7일 velocity 표시 (완료한 Bolt 수)</li>
+</ol>
+
+<h2>전제 조건</h2>
+<ul>
+<li>Sprint Status YAML이 생성되어 있어야 함 (Sprint Planning 워크플로우 실행)</li>
+<li>적어도 하나의 Story 파일 (<code>E{n}-S{n}-...</code>)이 존재</li>
+<li>LLM 설정 (Plan from Sprint 사용 시)</li>
+</ul>""",
+        "content_en": "<h1>Bolts — Short execution cycles</h1><p>Decompose Sprint into 1-3h Bolts with start/complete/approve lifecycle and append-only activity log.</p>",
+    },
+    {
+        "slug": "orchestrate",
+        "title": "Multi-Agent Orchestrate",
+        "group_name": "고급 기능",
+        "sort_order": 14,
+        "content_ko": """<h1>Multi-Agent Orchestrate</h1>
+<p>여러 페르소나를 <strong>격리된 컨텍스트</strong>의 subagent로 동시에 실행하고, 결과를 종합합니다. 메인 채팅 세션의 컨텍스트 사용량에는 영향이 없습니다 (GSD의 fresh-context 패턴 차용).</p>
+
+<h2>왜 필요한가?</h2>
+<ul>
+<li>Party Mode는 동기 토론 → 시간이 오래 걸림</li>
+<li>Propose 모드는 단일 페르소나 시각</li>
+<li>Multi-Agent는 4개 페르소나가 <strong>병렬</strong>로 분석 후 종합 → 다관점 검토를 빠르게 수행</li>
+<li>각 subagent가 자신의 격리된 컨텍스트만 사용 → 메인 채팅 토큰 소모 0</li>
+</ul>
+
+<h2>현재 시나리오</h2>
+<table>
+<thead><tr><th>시나리오</th><th>참여 페르소나</th><th>출력</th></tr></thead>
+<tbody>
+<tr><td><strong>review-prd</strong></td><td>PM · Architect · UX · Analyst (4 병렬)</td><td>Critical / Major / Minor 분류 + 상충 의견 + 권장 액션</td></tr>
+</tbody>
+</table>
+
+<h2>실행 흐름</h2>
+<ol>
+<li>좌측 사이드바 → <strong>오케스트레이트</strong></li>
+<li>시나리오 카드의 <strong>Run</strong> 버튼 클릭</li>
+<li>4개 subagent가 각자 격리된 컨텍스트로 LLM 호출 (동시 진행)</li>
+<li>모든 결과 수집 후 1회의 synthesis LLM 호출 → 종합 결과 생성</li>
+<li>화면에 Synthesis + 개별 subagent 출력 (펼치기)</li>
+</ol>
+
+<h2>제약</h2>
+<ul>
+<li>병렬 LLM 호출이므로 비용은 단일 호출의 4~5배 (4 subagent + 1 synthesis)</li>
+<li>개별 subagent 60초 / 전체 90초 타임아웃 (부분 실패 허용)</li>
+<li>LLM 설정 필수 (Anthropic / OpenAI / Google 등)</li>
+</ul>""",
+        "content_en": "<h1>Multi-Agent Orchestrate</h1><p>Run multiple personas in parallel with isolated contexts; main chat tokens unaffected.</p>",
+    },
+    {
+        "slug": "validation",
+        "title": "Validation — Spec Health 검증",
+        "group_name": "고급 기능",
+        "sort_order": 15,
+        "content_ko": """<h1>Validation — Spec Health 검증</h1>
+<p>아티팩트 저장 시 자동으로 cross-document 일관성을 검증하고 Spec Health Score(0~100)로 가시화합니다. P0 traceability 그래프를 활용하므로 derived_from 마커가 제대로 들어가 있을수록 검증 결과가 정확합니다.</p>
+
+<h2>6 룰 (5 결정적 + 1 LLM)</h2>
+<table>
+<thead><tr><th>Rule ID</th><th>Severity</th><th>What it checks</th></tr></thead>
+<tbody>
+<tr><td><code>fr_covered_by_story</code></td><td>error</td><td>모든 PRD FR이 Story에 의해 커버되는지</td></tr>
+<tr><td><code>nfr_referenced_in_architecture</code></td><td>warning</td><td>NFR이 Architecture 컴포넌트에 참조되는지</td></tr>
+<tr><td><code>ux_flow_aligned_with_journey</code></td><td>warning</td><td>UX User Flow가 PRD User Journey에 연결되는지</td></tr>
+<tr><td><code>orphan_anchor</code></td><td>info</td><td>어디에도 연결되지 않은 앵커</td></tr>
+<tr><td><code>estimation_sanity</code></td><td>info</td><td>Story points 합 vs Epic 복잡도 캡</td></tr>
+<tr><td><code>contradictory_terms</code> 🤖</td><td>info</td><td>PRD/Architecture 간 모순 (LLM 호출, 수동 트리거)</td></tr>
+</tbody>
+</table>
+
+<h2>Spec Health Score 계산</h2>
+<p>가중 페널티 방식: 100 - (error × 15 + warning × 4 + info × 1)</p>
+<ul>
+<li>90~100: 양호 (녹색)</li>
+<li>70~89: 주의 (호박색)</li>
+<li>50~69: 경고 (주황색)</li>
+<li>0~49: 위험 (장미색)</li>
+</ul>
+
+<h2>자동 트리거</h2>
+<p>아티팩트 저장 시 결정적 룰만 백그라운드에서 자동 재실행됩니다 (LLM 룰 제외). LLM 룰은 비용이 크기 때문에 사용자가 명시적으로 "Include LLM rules" 체크박스를 켜고 Run을 눌렀을 때만 실행됩니다.</p>
+
+<h2>이슈 라이프사이클</h2>
+<pre><code>open  ──Acknowledge──▶  acknowledged
+  │
+  ├──Resolve──▶  resolved (resolved_at 기록)
+  │
+  └──Suppress──▶  suppressed (룰 자체는 다음 run에서 다시 실행되지만 화면에서 숨김)</code></pre>
+<p>다음 run에서 동일 fingerprint가 사라지면 <strong>자동으로 resolved</strong> 처리됩니다 (수동 처리 불필요).</p>
+
+<h2>UI 사용법</h2>
+<ol>
+<li>좌측 사이드바 → <strong>검증</strong></li>
+<li>왼쪽 상단에 Spec Health Score 게이지</li>
+<li><strong>Run validation</strong> 버튼으로 수동 실행 (Include LLM rules로 LLM 룰 포함 여부 선택)</li>
+<li>이슈 리스트에서 severity 필터, 각 이슈에 Ack / Resolve / Suppress 액션</li>
+</ol>""",
+        "content_en": "<h1>Validation — Spec Health</h1><p>6 rules (5 deterministic + 1 LLM) auto-validate cross-document consistency. Spec Health Score 0-100.</p>",
+    },
 ]

@@ -43,6 +43,33 @@ const iconMap: Record<string, React.ReactNode> = {
       <circle cx="12" cy="12" r="3" />
     </svg>
   ),
+  Traceability: (
+    <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h6m4 0h6M4 12h16M4 18h6m4 0h6" />
+      <circle cx="10" cy="6" r="1.5" />
+      <circle cx="14" cy="18" r="1.5" />
+    </svg>
+  ),
+  Board: (
+    <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+    </svg>
+  ),
+  Orchestrate: (
+    <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+      <circle cx="6" cy="6" r="2" />
+      <circle cx="18" cy="6" r="2" />
+      <circle cx="6" cy="18" r="2" />
+      <circle cx="18" cy="18" r="2" />
+      <circle cx="12" cy="12" r="2.5" />
+      <path strokeLinecap="round" d="M8 7l3 3M16 7l-3 3M8 17l3-3M16 17l-3-3" />
+    </svg>
+  ),
+  Validation: (
+    <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ),
 };
 
 export function ProjectSidebar({ projectId, projectName }: ProjectSidebarProps) {
@@ -68,6 +95,10 @@ export function ProjectSidebar({ projectId, projectName }: ProjectSidebarProps) 
     { href: base, label: t("nav.overview"), icon: "Overview", exact: true },
     { href: `${base}/chat`, label: t("nav.chat"), icon: "Chat" },
     { href: `${base}/files`, label: t("nav.artifacts"), icon: "Files" },
+    { href: `${base}/traceability`, label: t("nav.traceability"), icon: "Traceability" },
+    { href: `${base}/validation`, label: t("nav.validation"), icon: "Validation" },
+    { href: `${base}/story-board`, label: t("nav.board"), icon: "Board" },
+    { href: `${base}/orchestrate`, label: t("nav.orchestrate"), icon: "Orchestrate" },
     { href: `${base}/context`, label: t("nav.context"), icon: "Context" },
     { href: `${base}/members`, label: t("nav.members"), icon: "Members" },
     { href: `${base}/settings`, label: t("nav.settings"), icon: "Settings" },

@@ -167,3 +167,49 @@
   border: 1px solid var(--border);
   margin: 0.75rem 0;
 }
+
+/* Trace anchor-content snippet — compact markdown rendering for the side panel */
+.trace-snippet-md .wmde-markdown {
+  background: transparent !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  color: inherit !important;
+}
+.trace-snippet-md .wmde-markdown h1,
+.trace-snippet-md .wmde-markdown h2,
+.trace-snippet-md .wmde-markdown h3,
+.trace-snippet-md .wmde-markdown h4,
+.trace-snippet-md .wmde-markdown h5,
+.trace-snippet-md .wmde-markdown h6 {
+  font-size: 12px !important;
+  margin: 0.5em 0 0.25em !important;
+  padding: 0 !important;
+  border: none !important;
+  font-weight: 600;
+}
+.trace-snippet-md .wmde-markdown p,
+.trace-snippet-md .wmde-markdown ul,
+.trace-snippet-md .wmde-markdown ol,
+.trace-snippet-md .wmde-markdown blockquote {
+  margin: 0.25em 0 !important;
+}
+.trace-snippet-md .wmde-markdown table {
+  font-size: 10px !important;
+  margin: 0.25em 0 !important;
+}
+.trace-snippet-md .wmde-markdown th,
+.trace-snippet-md .wmde-markdown td {
+  padding: 2px 6px !important;
+}
+.trace-snippet-md .wmde-markdown code {
+  font-size: 10px !important;
+  padding: 1px 4px !important;
+}
+.trace-snippet-md .wmde-markdown pre {
+  font-size: 10px !important;
+  padding: 6px !important;
+  margin: 0.25em 0 !important;
+}
+.trace-snippet-md .wmde-markdown hr {
+  margin: 0.5em 0 !important;
+}

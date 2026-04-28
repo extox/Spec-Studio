@@ -1,0 +1,126 @@
+# ===== CI/CD Pipeline (vendor-neutral) =====
+# derived_from: ARCH#C-1
+# Target vendor: {{ "github-actions" | "gitlab-ci" | "jenkins" }}
+# Cloud target: {{ aws | gcp | azure | on-prem }}
+
+metadata:
+  project: "{{project_name}}"
+  owners: []                 # team or person responsible
+  version: "1.0"
+  last_updated: "{{date}}"
+
+# Triggers: when does the pipeline run?
+triggers:
+  - event: push
+    branches: [main]
+    runs_stages: [build, lint, test, security-scan, package, deploy-staging]
+
+  - event: pull_request
+    runs_stages: [build, lint, test, security-scan]
+
+  - event: tag
+    pattern: "v*"
+    runs_stages: [build, lint, test, security-scan, package, deploy-prod]
+
+  - event: schedule
+    cron: "0 3 * * *"
+    runs_stages: [security-scan]
+
+# Environments
+environments:
+  - name: dev
+    auto_deploy: true
+  - name: staging
+    auto_deploy: true
+    requires: [dev]
+  - name: prod
+    auto_deploy: false
+    requires: [staging]
+    approval: manual
+
+# Pipeline stages
+stages:
+  - id: build
+    runs_on: "linux"
+    steps:
+      - checkout
+      - setup_toolchain:
+          language: "{{language}}"
+          version: "{{version}}"
+      - install_deps
+      - compile
+    success_criteria: "exit 0 AND build artifact present"
+    on_failure: "block merge"
+    artifacts: ["dist/"]
+
+  - id: lint
+    depends_on: [build]
+    steps:
+      - run: "{{lint_command}}"
+    success_criteria: "exit 0"
+    on_failure: "block merge"
+
+  - id: test
+    depends_on: [build]
+    steps:
+      - run: "{{unit_test_command}}"
+      - run: "{{integration_test_command}}"
+    success_criteria: "exit 0 AND coverage >= 70%"
+    on_failure: "block merge"
+    artifacts: ["coverage/"]
+
+  - id: security-scan
+    depends_on: [build]
+    steps:
+      - sca_scan: "{{sca_tool}}"
+      - secret_scan
+      - container_scan:
+          enabled: true
+    success_criteria: "no HIGH or CRITICAL findings"
+    on_failure: "block merge"
+
+  - id: package
+    depends_on: [test, security-scan]
+    steps:
+      - build_image: "{{image_name}}:{{sha}}"
+      - push_image:
+          registry: "${{ secrets.REGISTRY_URL }}"
+    success_criteria: "image pushed"
+
+  - id: deploy-staging
+    depends_on: [package]
+    when: "branch == main"
+    steps:
+      - deploy: { env: staging, image: "{{image_name}}:{{sha}}" }
+      - smoke_test
+    on_failure: "rollback to previous image"
+
+  - id: deploy-prod
+    depends_on: [deploy-staging]
+    when: "tag matches v*"
+    approval: manual
+    steps:
+      - deploy: { env: prod, image: "{{image_name}}:{{sha}}" }
+      - smoke_test
+      - announce: "#release-channel"
+    on_failure: "rollback + page oncall"
+
+# Quality gates (applied across stages)
+quality_gates:
+  coverage_line_min: 70
+  coverage_branch_min: 60
+  security_fail_on: ["HIGH", "CRITICAL"]
+  required_reviews: 1
+
+# Secrets (NEVER plaintext — use placeholders)
+secrets:
+  - name: REGISTRY_URL
+    used_by: [package]
+  - name: DEPLOY_KEY
+    used_by: [deploy-staging, deploy-prod]
+
+# Rollback policy
+rollback:
+  strategy: previous-image
+  trigger: smoke-test-failure
+  window_minutes: 5

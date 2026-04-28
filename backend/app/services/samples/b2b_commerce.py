@@ -164,7 +164,7 @@ Java 17/Spring Boot 3.x 백엔드, Next.js 14 프론트엔드, PostgreSQL 16 데
 
 ## 5. User Journeys
 
-### User Type 1: 구매 담당자 김민수 (중소 제조업체 자재팀장, 42세)
+### UJ-001: 구매 담당자 김민수 (중소 제조업체 자재팀장, 42세)
 
 **Discovery:** 월 30건 이상의 부품·자재를 팩스와 전화로 발주. 단가 비교를 위해 공급사 3곳에 각각 견적을 요청하며 이메일과 팩스를 뒤지는 데 하루 2시간 소비. "B2B 발주 시스템"을 검색하여 TradeHub 발견.
 
@@ -176,7 +176,7 @@ Java 17/Spring Boot 3.x 백엔드, Next.js 14 프론트엔드, PostgreSQL 16 데
 
 **Return Usage:** 매주 반복 발주 상품을 "자주 주문 목록"에서 원클릭 재발주. 월간 구매 분석 리포트로 비용 절감 포인트 파악.
 
-### User Type 2: 공급사 영업 담당자 박서연 (유통업체 영업팀, 35세)
+### UJ-002: 공급사 영업 담당자 박서연 (유통업체 영업팀, 35세)
 
 **Discovery:** 30개 거래처의 주문을 엑셀로 관리. 견적 요청 응답 지연으로 거래를 놓치는 경우 발생. 거래처가 TradeHub 사용을 제안하여 가입.
 
@@ -308,7 +308,7 @@ Java 17/Spring Boot 3.x 백엔드, Next.js 14 프론트엔드, PostgreSQL 16 데
 
 ## 9. Non-Functional Requirements
 
-### 9.1 Performance
+### 9.1 Performance — NFR-001
 
 | Metric | Target |
 |--------|--------|
@@ -318,7 +318,7 @@ Java 17/Spring Boot 3.x 백엔드, Next.js 14 프론트엔드, PostgreSQL 16 데
 | 동시 사용자 | 2,000명 |
 | 상품 카탈로그 | 100만 SKU 지원 |
 
-### 9.2 Security
+### 9.2 Security — NFR-002
 
 - 비밀번호: BCrypt (strength 12)
 - 인증: JWT RS256, Spring Security + RBAC (역할 기반 접근 제어)
@@ -328,21 +328,21 @@ Java 17/Spring Boot 3.x 백엔드, Next.js 14 프론트엔드, PostgreSQL 16 데
 - 민감 정보: Azure Key Vault, 환경변수 관리
 - 감사 로그: 정산, 단가 변경, 기업 승인 등 주요 액션 로깅
 
-### 9.3 Scalability
+### 9.3 Scalability — NFR-003
 
 - 수평 확장: Azure AKS 오토스케일링 (CPU 70% 기준, pod 2~10개)
 - DB: PostgreSQL Read Replica (읽기 분산), 정산 테이블 월별 파티셔닝
 - 검색: Elasticsearch 클러스터 (3 노드, 샤드 분산)
 - 메시징: Azure Service Bus (주문 이벤트, 정산 배치, 알림)
 
-### 9.4 Reliability
+### 9.4 Reliability — NFR-004
 
 - 가용성: 99.9% (업무시간 기준, 월간 다운타임 < 43분)
 - 백업: Azure PostgreSQL 자동 백업 (30일 보존), PITR 지원
 - 에러 추적: Application Insights + Sentry
 - 정산 데이터: 이중 검증 (계산 결과 크로스체크), 감사 로그
 
-### 9.5 Accessibility
+### 9.5 Accessibility — NFR-005
 
 - WCAG 2.1 AA 준수
 - 키보드 네비게이션 지원

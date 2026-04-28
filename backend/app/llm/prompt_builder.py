@@ -92,6 +92,10 @@ def build_system_prompt(
         "`story-slug` must be kebab-case, lowercase, English, derived from the story title.\n"
         "- Project Context → `planning-artifacts/project-context.md`\n"
         "- Sprint Status → `implementation-artifacts/sprint-status.md`\n"
+        "- Code Skeleton → `construction-artifacts/E{epicNum}-S{storyNum}-skeleton.md`\n"
+        "- Test Plan → `construction-artifacts/E{epicNum}-S{storyNum}-test-plan.md`\n"
+        "- CI Pipeline → `construction-artifacts/ci-pipeline.yaml`\n"
+        "- IaC → `construction-artifacts/iac.yaml`\n"
     )
 
     # Get template content for current workflow if available
@@ -128,6 +132,26 @@ def build_system_prompt(
         "- You may include explanation text before or after the markers.\n"
         "- The system will automatically save the file when these markers are detected.\n"
         f"{template_ref}"
+    )
+
+    parts.append(
+        "\n## Anchor & Traceability Convention\n"
+        "Every requirement, decision, and component you write MUST carry a stable anchor ID so that "
+        "downstream artifacts can be traced back to it. NEVER renumber an existing anchor.\n\n"
+        "Anchor types by artifact:\n"
+        "- PRD → `FR-001` (functional req), `NFR-001` (non-functional req), `UJ-001` (user journey)\n"
+        "- Architecture → `ADR-001` (decision), `C-1` (component, used as section heading)\n"
+        "- UX Spec → `UF-001` (user flow), `CMP-001` (UI component)\n"
+        "- Epics → `E-001`\n"
+        "- Stories → `S-001` or per-epic `E1-S3`\n\n"
+        "When an artifact element derives from upstream items, place a derivation marker on the\n"
+        "line immediately under the heading — e.g.:\n\n"
+        "```markdown\n"
+        "### C-1: API Gateway\n"
+        "<!-- derived_from: PRD#FR-001, PRD#NFR-002 -->\n"
+        "```\n\n"
+        "Allowed prefixes inside derived_from: `PRD`, `BRIEF`, `ARCH`, `UX`, `EPIC`, `STORY`.\n"
+        "Only declare derivations you are confident about — do NOT invent links.\n"
     )
 
     # 5. Project context

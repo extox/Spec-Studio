@@ -60,6 +60,34 @@ TEMPLATES = {
         "phase": "implementation",
         "description": "YAML-based sprint tracking with epic/story status state machine.",
     },
+    "code-skeleton": {
+        "id": "code-skeleton",
+        "name": "Code Skeleton",
+        "file_name": "code-skeleton.md",
+        "phase": "construction",
+        "description": "Story-scoped directory tree + function signatures with TODO markers tied to BDD scenarios.",
+    },
+    "test-plan": {
+        "id": "test-plan",
+        "name": "Test Plan",
+        "file_name": "test-plan.md",
+        "phase": "construction",
+        "description": "BDD-derived test matrix with unit/integration/E2E classification, fixtures, and risk notes.",
+    },
+    "ci-pipeline": {
+        "id": "ci-pipeline",
+        "name": "CI/CD Pipeline",
+        "file_name": "ci-pipeline.yaml",
+        "phase": "construction",
+        "description": "Vendor-neutral CI/CD pipeline YAML (triggers, stages, quality gates, rollback).",
+    },
+    "iac": {
+        "id": "iac",
+        "name": "Infrastructure as Code",
+        "file_name": "iac.yaml",
+        "phase": "construction",
+        "description": "Vendor-neutral IaC sketch: network topology, resources, identity, secrets, config.",
+    },
 }
 
 

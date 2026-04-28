@@ -483,7 +483,7 @@ const ko = {
   // Context Expansion (컨텍스트 확장 관리)
   "nav.context": "컨텍스트",
   "nav.traceability": "추적",
-  "nav.bolts": "볼트",
+  "nav.board": "실행 보드",
   "nav.orchestrate": "오케스트레이트",
   "nav.validation": "검증",
   "contextMgmt.title": "컨텍스트",
@@ -666,6 +666,7 @@ const ko = {
   "trace.deleteFail": "삭제 실패",
   "trace.rebuildAllOk": "전체 재구축 완료: 프로젝트 전체 명시적 링크 {count}개",
   "trace.filter": "유형 필터:",
+  "trace.totalAnchorsHint": "프로젝트 전체 앵커 수 (검증 점수의 분모와 동일)",
   "trace.focusOn": "선택:",
   "trace.clearFocus": "선택 해제",
   "trace.focusDepth": "거리: {n}홉",
@@ -678,6 +679,10 @@ const ko = {
   "trace.openFile": "파일 열기",
   "trace.collapse": "접기",
   "trace.expand": "펼치기",
+  "trace.sidePanelLabel": "상세 패널",
+  "trace.collapseSidePanel": "상세 패널 접기",
+  "trace.expandSidePanel": "상세 패널 펼치기",
+  "trace.fitAll": "전체 보기",
   "trace.orphanHint": "어떤 추적 링크도 가지지 않은 앵커입니다. 코드 린터의 '미사용 변수'와 비슷한 품질 신호로, derived_from 마커를 추가하거나 Story로 분해하는 것을 검토하세요.",
   "trace.searchPlaceholder": "앵커 검색 (예: FR-0, C-1)",
   "trace.searchClear": "검색 지우기",
@@ -690,7 +695,41 @@ const ko = {
   "trace.showOrphansToggle": "미참조 앵커 포함",
   "trace.showOrphansHint": "켜면 어떤 추적 링크도 없는 미참조 앵커도 그래프에 표시합니다.",
 
-  // ─── Bolts (P2) ───────────────────────────────────────────────────────
+  // ─── Story Execution Board (Story 칸반) ───────────────────────────────
+  "board.title": "실행 보드",
+  "board.subtitle": "Story 단위로 진행 상태를 추적합니다. 카드를 드래그하여 다른 컬럼으로 이동하세요.",
+  "board.totalStories": "전체 Story",
+  "board.reload": "새로고침",
+  "board.empty": "비어있음",
+  "board.col.todo": "할 일",
+  "board.col.in_progress": "진행 중",
+  "board.col.review": "검토 대기",
+  "board.col.done": "완료",
+  "board.col.blocked": "차단됨",
+  "board.moveTo": "{status}(으)로 이동",
+  "board.moveOk": "{id} → {status}",
+  "board.moveFail": "상태 변경 실패",
+  "board.loadFailed": "보드 로드 실패",
+  "board.generateAll": "모든 Story 일괄 생성",
+  "board.generating": "생성 중...",
+  "board.generateOk": "Story {created}개 생성 (스킵 {skipped}, 실패 {failed})",
+  "board.generateNoneNeeded": "추가 생성할 Story 없음 (이미 {skipped}개 존재)",
+  "board.generateError": "일괄 생성 불가: {reason}",
+  "board.generateFailed": "일괄 생성 호출 실패",
+  "board.generateProgress": "진행 중... ({done}개 생성됨)",
+  "board.generateByEpic": "Epic 단위 생성",
+  "board.preview": "미리보기",
+  "board.edit": "편집",
+  "board.delete": "삭제",
+  "board.openInEditor": "편집으로 이동",
+  "board.previewLoading": "불러오는 중...",
+  "board.previewEmpty": "내용이 비어 있습니다.",
+  "board.previewFailed": "미리보기 로드 실패",
+  "board.deleteConfirm": "{id} {title} 스토리를 삭제하시겠습니까? (파일이 영구 삭제됩니다)",
+  "board.deleteOk": "{id} 삭제됨",
+  "board.deleteFailed": "삭제 실패",
+
+  // ─── Bolts (deprecated — kept for legacy refs) ────────────────────────
   "bolt.title": "볼트",
   "bolt.subtitle": "현재 스프린트에서 분해된 1~3시간 단위의 짧고 강도 높은 실행 사이클입니다.",
   "bolt.last7Days": "지난 7일",
@@ -737,8 +776,13 @@ const ko = {
 
   // ─── Validation (P4) ──────────────────────────────────────────────────
   "valid.title": "검증",
-  "valid.specHealth": "Spec 상태",
-  "valid.openIssues": "{count}개의 미해결 이슈",
+  "valid.specHealth": "엔진 결과 (실제 상태)",
+  "valid.openIssues": "엔진이 탐지한 미해결 이슈 {count}개",
+  "valid.labelSection": "사용자 라벨 (산출물 미변경)",
+  "valid.labelAck": "확인 {count}",
+  "valid.labelResolved": "해결 {count}",
+  "valid.labelSuppressed": "숨김 {count}",
+  "valid.labelHint": "아래 라벨은 화면 정리용 표시일 뿐 산출물 파일은 바뀌지 않습니다. 실제 수정은 산출물 편집 후 '검증 실행'을 다시 누를 때 반영됩니다.",
   "valid.statusFilter": "상태:",
   "valid.statusOpen": "미해결",
   "valid.statusAcknowledged": "확인됨",
@@ -750,11 +794,13 @@ const ko = {
   "valid.suppressed": "숨김 처리됨",
   "valid.reopened": "다시 열림",
   "valid.reopen": "다시 열기",
-  "valid.scoreNote": "점수는 검증 실행 시점 기준입니다. 이슈를 처리한 후 점수를 업데이트하려면 '검증 실행'을 다시 클릭하세요.",
+  "valid.scoreNote": "점수 = 100 × (1 − 영향 앵커 ÷ 전체 앵커). error=1.0, warning=0.5, info=0.25 가중. 검증 실행 시점의 미해결 이슈 기준입니다.",
+  "valid.scoreFormulaToggle": "공식·실행 정보",
+  "valid.anchorsTotal": "프로젝트 전체 앵커 {total}개를 분모로 사용합니다.",
   "valid.noRunYet": "아직 검증 실행 기록이 없습니다.",
-  "valid.runMeta": "{rules}개 룰 · {ms}ms",
+  "valid.runMeta": "{rules}개 규칙 · {ms}ms",
   "valid.triggered": "트리거: {by} · {when}",
-  "valid.includeLlm": "LLM 룰 포함",
+  "valid.includeLlm": "LLM 규칙 포함",
   "valid.runValidation": "검증 실행",
   "valid.running": "실행 중...",
   "valid.runOk": "실행 완료: 미해결 {open}개 · 신규 해결 {resolved}개",
@@ -766,6 +812,145 @@ const ko = {
   "valid.severityInfo": "정보",
   "valid.loading": "로딩 중...",
   "valid.noIssues": "미해결 이슈가 없습니다 🎉",
+  "valid.resultCount": "{count}건",
+  "valid.openFile": "산출물",
+  "valid.openInArtifacts": "산출물 열기",
+  "valid.openInTrace": "추적 그래프",
+  "valid.preview": "미리보기",
+  "valid.previewFailed": "산출물 미리보기 로드 실패",
+  "valid.noPreview": "연결된 산출물이 없습니다.",
+  "valid.prev": "이전",
+  "valid.next": "다음",
+
+  // Rule message templates — {anchor}, {related} 변수 사용
+  "valid.rule.fr_covered_by_story.message":
+    "PRD의 FR `{anchor}`을(를) 커버하는 Story가 없습니다.",
+  "valid.rule.fr_covered_by_story.suggestion":
+    "`derived_from: PRD#{anchor}` 마커를 가진 Story를 만들거나, 해당 FR을 deferred로 표시하세요.",
+  "valid.rule.fr_covered_by_story.no_story_files.message":
+    "`implementation-artifacts/` 폴더에 Story 파일이 하나도 없습니다. epic.md 안에 적힌 스토리는 검증 대상으로 인식되지 않으며, 각 스토리는 `E{n}-S{n}-{slug}.md` 형식의 별도 파일로 저장되어야 합니다.",
+  "valid.rule.fr_covered_by_story.no_story_files.suggestion":
+    "epic.md에 나열된 각 스토리에 대해 'Create Story' 워크플로우를 실행해 별도 STORY 파일(`derived_from: PRD#FR-xxx` 마커 포함)을 생성하세요. 'Create Epics & Stories'만 실행하면 epic.md 안에 스토리 개요만 만들어집니다.",
+  "valid.rule.nfr_referenced_in_architecture.message":
+    "NFR `{anchor}`이(가) Architecture에서 참조되지 않습니다.",
+  "valid.rule.nfr_referenced_in_architecture.suggestion":
+    "Architecture 컴포넌트(C-#) 또는 ADR에서 NFR `{anchor}`을(를) 참조하세요.",
+  "valid.rule.ux_flow_aligned_with_journey.message":
+    "User Flow `{anchor}`이(가) 어떤 PRD User Journey(UJ-)와도 연결되지 않습니다.",
+  "valid.rule.ux_flow_aligned_with_journey.suggestion":
+    "UX Flow에 `derived_from: PRD#UJ-...` 마커를 추가하거나, PRD에 해당 User Journey를 작성하세요.",
+  "valid.rule.orphan_anchor.message":
+    "앵커 `{anchor}`이(가) 어떤 산출물과도 연결되지 않았습니다.",
+  "valid.rule.orphan_anchor.suggestion":
+    "이 앵커를 상위/하위 산출물에 연결하는 `derived_from` 마커를 추가하거나, 더 이상 필요하지 않다면 제거하세요.",
+  "valid.rule.estimation_sanity.suggestion":
+    "Epic을 분할하거나 Story 추정치(스토리 포인트)를 재검토하는 것을 고려하세요.",
+
+  // Rule names + descriptions (for the rules info popover)
+  "valid.rulesInfo": "6개 규칙 보기",
+  "valid.rulesListTitle": "검증 규칙 6종",
+  "valid.rule.fr_covered_by_story.name": "FR ↔ Story 커버리지",
+  "valid.rule.fr_covered_by_story.desc":
+    "PRD의 모든 기능 요구사항(FR)이 최소 하나의 Story로 분해·추적되는지 확인합니다.",
+  "valid.rule.nfr_referenced_in_architecture.name": "NFR ↔ Architecture 참조",
+  "valid.rule.nfr_referenced_in_architecture.desc":
+    "비기능 요구사항(NFR)이 Architecture 컴포넌트나 ADR에서 참조되는지 확인합니다.",
+  "valid.rule.ux_flow_aligned_with_journey.name": "UX Flow ↔ User Journey 정합",
+  "valid.rule.ux_flow_aligned_with_journey.desc":
+    "UX Spec의 User Flow가 PRD의 User Journey(UJ-)와 연결되어 있는지 확인합니다.",
+  "valid.rule.orphan_anchor.name": "고립 앵커 탐지",
+  "valid.rule.orphan_anchor.desc":
+    "어떤 추적 링크의 출발점도, 도착점도 아닌 고립된 앵커를 찾아냅니다.",
+  "valid.rule.estimation_sanity.name": "스토리 포인트 정합",
+  "valid.rule.estimation_sanity.desc":
+    "Epic 복잡도와 하위 Story 포인트 합계의 비율이 합리적인 범위를 벗어나는지 확인합니다.",
+  "valid.rule.contradictory_terms.name": "용어 모순 탐지 (LLM)",
+  "valid.rule.contradictory_terms.desc":
+    "LLM이 PRD와 Architecture를 함께 읽고 의미적으로 모순되는 진술을 찾아냅니다.",
+
+  // Resolution guide — step-by-step actions
+  "guide.title": "해결 가이드",
+  "guide.expand": "펼쳐서 자세히 보기",
+  "guide.collapse": "접기",
+  "guide.afterFix":
+    "산출물을 저장하면 검증이 자동으로 재실행되며, 같은 fingerprint의 이슈는 자동으로 '해결됨'으로 처리됩니다.",
+  "guide.openPRD": "PRD 열기",
+  "guide.openUX": "UX 스펙 열기",
+  "guide.openARCH": "Architecture 열기",
+  "guide.openEPIC": "Epic 열기",
+  "guide.openStoryFolder": "implementation-artifacts 폴더 열기",
+  "guide.openArtifact": "산출물 열기",
+  "guide.openInTrace": "추적 그래프에서 보기",
+
+  "guide.fr_covered_by_story.step1":
+    "PRD를 열어 FR `{anchor}`의 요구사항 본문, Acceptance Criteria, Priority를 다시 읽고 어떤 동작을 구현해야 하는지 명확히 합니다.",
+  "guide.fr_covered_by_story.step2":
+    "implementation-artifacts/ 디렉토리에서 이 FR을 다룰 적절한 Epic을 찾거나 새로 만듭니다 (예: `epic-customer-onboarding.md`).",
+  "guide.fr_covered_by_story.step3":
+    "Epic 안에 Story 파일을 새로 만들고 헤더에 derived_from 마커를 추가합니다. 마커는 검증 엔진이 추적하는 핵심 메타데이터입니다.",
+  "guide.fr_covered_by_story.step4":
+    "Story 본문에 BDD 형식의 Acceptance Criteria(Given/When/Then)를 작성하고, 스토리 포인트를 추정합니다.",
+  "guide.fr_covered_by_story.altDeferred":
+    "대안: 이 FR을 이번 릴리스에서 다루지 않기로 결정했다면 PRD의 FR `{anchor}` 라인 옆에 `(deferred)` 주석을 달거나 Priority를 'Won't'로 변경하세요. 그러면 검증에서 자동으로 제외됩니다.",
+
+  "guide.nfr_referenced_in_architecture.step1":
+    "PRD를 열어 NFR `{anchor}`의 정량적 기준(예: '응답 시간 200ms 이내', '99.9% 가용성')을 확인합니다.",
+  "guide.nfr_referenced_in_architecture.step2":
+    "Architecture 산출물을 열어 이 NFR을 책임질 컴포넌트(C-#)를 식별합니다. 어떤 컴포넌트도 책임지지 않는다면 새로 추가해야 할 수 있습니다.",
+  "guide.nfr_referenced_in_architecture.step3":
+    "선택한 컴포넌트의 설명 단락 또는 'Addresses' 라인에 NFR 앵커를 명시적으로 참조합니다.",
+  "guide.nfr_referenced_in_architecture.altADR":
+    "대안: 해당 NFR을 만족시키는 결정이 별도의 ADR 문서로 분리되어 있다면, ADR 본문에서 NFR을 참조하세요.",
+
+  "guide.ux_flow_aligned_with_journey.step1":
+    "UX Spec을 열어 User Flow `{anchor}`이 어떤 사용자 시나리오를 묘사하는지 확인합니다.",
+  "guide.ux_flow_aligned_with_journey.step2":
+    "PRD의 'User Journeys' 섹션에서 동일/유사한 시나리오를 다루는 UJ-### 항목이 있는지 확인합니다.",
+  "guide.ux_flow_aligned_with_journey.step3":
+    "있다면 UX Flow 헤더에 derived_from 마커를 추가합니다.",
+  "guide.ux_flow_aligned_with_journey.altCreateUJ":
+    "대안: PRD에 대응되는 User Journey가 없다면, PRD를 열어 UJ-### 항목을 새로 만들고(이름·트리거·주요 단계) UX Flow와 양방향으로 의미가 맞도록 정렬하세요.",
+
+  "guide.orphan_anchor.step1":
+    "추적 그래프에서 앵커 `{anchor}`을(를) 검색해 정말 어떤 산출물과도 연결되지 않은 상태인지 시각으로 확인합니다.",
+  "guide.orphan_anchor.expects.UJ":
+    "UJ(User Journey)는 PRD에서 정의되고, **UX 스펙의 User Flow(UF-###)** 가 `derived_from: PRD#UJ-###`로 받아주는 것이 정상입니다. 이 UJ를 다루는 UF 섹션이 없다면 UX 스펙에 추가하세요.",
+  "guide.orphan_anchor.expects.FR":
+    "FR(Functional Requirement)은 **별도 STORY 파일(`E{n}-S{n}-...md`)** 이 `derived_from: PRD#FR-###`로 받아주는 것이 정상입니다. epic.md 안의 스토리 개요가 아니라, implementation-artifacts 폴더에 별도 파일이 있어야 합니다.",
+  "guide.orphan_anchor.expects.NFR":
+    "NFR(Non-Functional Requirement)은 **Architecture의 컴포넌트(C-###) 또는 ADR**이 'Addresses: PRD#NFR-###'로 명시 참조하는 것이 정상입니다.",
+  "guide.orphan_anchor.expects.UF":
+    "UF(User Flow)는 UX 스펙에서 정의되고, 헤더에 `derived_from: PRD#UJ-###` 마커로 PRD의 User Journey와 연결되는 것이 정상입니다.",
+  "guide.orphan_anchor.expects.C":
+    "C(Component)는 Architecture에서 정의되고, 'Addresses' 라인이나 본문에서 PRD의 FR/NFR을 참조해 어떤 요구사항을 책임지는지 드러내는 것이 정상입니다.",
+  "guide.orphan_anchor.expects.ADR":
+    "ADR(Architecture Decision Record)은 Context/Decision 본문에서 PRD의 NFR/FR이나 Architecture 컴포넌트(C-###)를 참조해 결정의 근거를 연결하는 것이 정상입니다.",
+  "guide.orphan_anchor.expects.E":
+    "E(Epic)는 epic.md에서 정의되고, 'Covers' 또는 본문에서 PRD의 FR-### 묶음을 참조해 어떤 요구사항 범위를 묶는지 드러내는 것이 정상입니다.",
+  "guide.orphan_anchor.expects.S":
+    "S(Story)는 헤더의 `derived_from`으로 EPIC#E-### 또는 PRD#FR-###을 참조하는 것이 정상입니다. 마커가 비어 있다면 추가하세요.",
+  "guide.orphan_anchor.expects.default":
+    "이 앵커가 *상위 산출물에서 파생된* 것이라면 헤더에 derived_from 마커를 추가하고, *하위 산출물이 받아줘야 할 항목*이라면 그 하위 산출물을 새로 만들거나 마커를 추가하세요.",
+  "guide.orphan_anchor.step3":
+    "위 안내에 맞는 산출물을 열어 다음 형태의 마커를 추가합니다.",
+  "guide.orphan_anchor.altRemove":
+    "대안: 더 이상 의미 없는 죽은 앵커라면 산출물에서 `{anchor}` 행을 삭제하세요. 검증 엔진이 자동으로 이슈를 '해결됨'으로 닫습니다.",
+
+  "guide.estimation_sanity.step1":
+    "관련 Epic 산출물을 열어 'Complexity' 또는 'Size' 표기와 하위 Story의 스토리 포인트 합계를 다시 확인합니다.",
+  "guide.estimation_sanity.step2":
+    "Epic 복잡도가 낮은데 Story 포인트 합이 큰 경우: Epic을 두 개로 분할하거나, 일부 Story를 별도의 Epic으로 옮기세요.",
+  "guide.estimation_sanity.step3":
+    "반대로 Epic 복잡도가 높은데 Story 포인트가 너무 적은 경우: 누락된 시나리오·엣지 케이스가 있는지 검토하고 Story를 추가하세요.",
+
+  "guide.contradictory_terms.step1":
+    "이슈 메시지에서 LLM이 발견한 두 진술(예: PRD의 '실시간 처리'와 Architecture의 '5분 배치')을 다시 읽고, 정말 모순인지 검토합니다.",
+  "guide.contradictory_terms.step2":
+    "추적 그래프에서 두 앵커를 함께 보면서, 실제로는 서로 다른 컨텍스트에서 같은 단어를 다르게 쓰고 있는지 확인합니다.",
+  "guide.contradictory_terms.step3":
+    "진짜 모순이라면 한쪽을 정정하거나(권장: 비즈니스 의도 우선), 별도 ADR을 작성해 두 진술이 어떤 조건에서 양립 가능한지 명시합니다.",
+  "guide.contradictory_terms.note":
+    "참고: 이 규칙은 LLM 기반이라 false positive가 발생할 수 있습니다. 모순이 아니라고 판단되면 '숨김' 처리하세요.",
   "valid.ack": "확인",
   "valid.resolve": "해결",
   "valid.suppress": "숨김",

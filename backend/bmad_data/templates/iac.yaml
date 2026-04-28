@@ -1,0 +1,116 @@
+# ===== Infrastructure-as-Code (vendor-neutral) =====
+# derived_from: ARCH#C-1
+# Cloud target: {{ aws | gcp | azure | on-prem | multi }}
+#
+# Resource ids use kebab-case. Reference ids with "${{ resources.<id> }}".
+# Never embed secrets in plaintext — use "${{ secrets.<NAME> }}".
+
+metadata:
+  project: "{{project_name}}"
+  version: "1.0"
+  last_updated: "{{date}}"
+  cloud: "{{aws|gcp|azure|on-prem|multi}}"
+
+# Environments
+environments:
+  - name: dev
+  - name: staging
+  - name: prod
+
+# Network topology
+network:
+  vpcs:
+    - id: main-vpc
+      cidr: "10.0.0.0/16"
+      envs: [dev, staging, prod]
+
+  subnets:
+    - id: public-subnet-a
+      vpc: main-vpc
+      cidr: "10.0.1.0/24"
+      public: true
+    - id: private-subnet-a
+      vpc: main-vpc
+      cidr: "10.0.10.0/24"
+      public: false
+
+  security_groups:
+    - id: sg-web
+      vpc: main-vpc
+      rules:
+        - { direction: ingress, protocol: tcp, ports: [443],  source: "0.0.0.0/0" }
+        - { direction: egress,  protocol: tcp, ports: [all],  target: "0.0.0.0/0" }
+
+# Resources (each should tie back to an architecture component via derived_from)
+resources:
+  # derived_from: ARCH#C-1
+  - id: api-service
+    type: container
+    component: C-1
+    image: "${{ secrets.REGISTRY_URL }}/{{image_name}}:{{tag}}"
+    cpu: 0.5
+    memory_mb: 512
+    env:
+      NODE_ENV: "${{ env }}"
+      DB_HOST: "${{ resources.primary-db.endpoint }}"
+      DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
+    networks:
+      - subnet: private-subnet-a
+        security_group: sg-web
+    depends_on: [primary-db]
+    scaling:
+      min: 1
+      max: 4
+      target_cpu_percent: 60
+
+  # derived_from: ARCH#C-2
+  - id: primary-db
+    type: managed-database
+    component: C-2
+    engine: postgres
+    version: "16"
+    storage_gb: 50
+    backup_retention_days: 7
+    subnet: private-subnet-a
+    security_group: sg-web
+
+  # derived_from: ARCH#C-3
+  - id: object-storage
+    type: object-store
+    component: C-3
+    versioning: true
+    lifecycle:
+      - transition_to_cold_after_days: 30
+      - delete_after_days: 365
+
+# Identity
+identity:
+  service_accounts:
+    - id: api-runtime
+      used_by: [api-service]
+      permissions:
+        - "read:secrets"
+        - "read-write:object-storage:app-bucket"
+
+# Secrets (all values are placeholders)
+secrets:
+  - name: DB_PASSWORD
+    used_by: [api-service]
+    store: "cloud-secret-manager"
+    rotation_days: 90
+  - name: REGISTRY_URL
+    used_by: [api-service]
+
+# Config per environment (non-secret)
+config:
+  dev:
+    LOG_LEVEL: debug
+  staging:
+    LOG_LEVEL: info
+  prod:
+    LOG_LEVEL: warn
+
+# Output bindings for downstream pipelines
+outputs:
+  - name: api_url
+    value: "${{ resources.api-service.url }}"

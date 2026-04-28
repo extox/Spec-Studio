@@ -4,7 +4,7 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = "sqlite+aiosqlite:///./web_bmad.db"
+    DATABASE_URL: str = "sqlite+aiosqlite:///./spec_data.db"
 
     # JWT
     JWT_SECRET_KEY: str = "dev-secret-key-change-in-production"

@@ -881,6 +881,10 @@ FILE_NAME_MAP = {
     "ux-spec": ("planning-artifacts/ux-spec.md", "ux-spec.md"),
     "project-context": ("planning-artifacts/project-context.md", "project-context.md"),
     "sprint-status": ("implementation-artifacts/sprint-status.md", "sprint-status.md"),
+    # Construction artifacts: code-skeleton & test-plan use dynamic per-story naming
+    # via SAVE_FILE markers, ci-pipeline & iac use fixed paths.
+    "ci-pipeline": ("construction-artifacts/ci-pipeline.yaml", "ci-pipeline.yaml"),
+    "iac": ("construction-artifacts/iac.yaml", "iac.yaml"),
 }
 
 
@@ -909,9 +913,17 @@ async def _auto_compile_deliverable(
 
     file_path, file_name = mapping
 
-    # Story template uses dynamic filename (E{epicNum}-S{storyNum}-{slug}.md)
-    # so we route saving through SAVE_FILE marker parsing instead of the static mapping.
+    # Story template uses dynamic filename (E{epicNum}-S{storyNum}-{slug}.md).
+    # Construction artifacts that are story-scoped (code-skeleton, test-plan)
+    # ALSO use dynamic per-story naming. All of these route saving through
+    # SAVE_FILE marker parsing instead of the static mapping.
     is_story = template_id == "story"
+    DYNAMIC_TEMPLATES = {
+        "story": "implementation-artifacts/E{epicNum}-S{storyNum}-{story-slug}.md",
+        "code-skeleton": "construction-artifacts/E{epicNum}-S{storyNum}-skeleton.md",
+        "test-plan": "construction-artifacts/E{epicNum}-S{storyNum}-test-plan.md",
+    }
+    is_dynamic = template_id in DYNAMIC_TEMPLATES
 
     # Load BMad template
     template_content = get_template_content(template_id)
@@ -952,6 +964,15 @@ async def _auto_compile_deliverable(
             "(e.g., `user-login` for \"User Login\").\n"
             "  - Example: `<!-- SAVE_FILE: implementation-artifacts/E1-S3-user-login.md -->`\n"
             "  - NEVER use `story.md` — it would overwrite previous stories.\n"
+        )
+    elif is_dynamic:
+        dyn_path = DYNAMIC_TEMPLATES[template_id]
+        compile_prompt += (
+            f"- Wrap the entire document with SAVE_FILE markers using a UNIQUE dynamic filename:\n"
+            f"  `<!-- SAVE_FILE: {dyn_path} -->`\n"
+            f"  followed by the document, followed by `<!-- END_FILE -->`.\n"
+            f"  - `epicNum` / `storyNum`: integers inferred from the conversation.\n"
+            f"  - Each story must produce a UNIQUE file — never overwrite an existing one.\n"
         )
 
     if template_content:
@@ -1058,8 +1079,9 @@ async def _auto_compile_deliverable(
     })
 
     # Auto-save to file (with version tracking)
-    if is_story:
-        # Story: dynamic filename driven by SAVE_FILE marker in the LLM output.
+    if is_dynamic:
+        # Dynamic templates (story / code-skeleton / test-plan): filename comes
+        # from a SAVE_FILE marker emitted by the LLM.
         saved = SAVE_FILE_PATTERN.findall(full_content)
         if saved:
             await _parse_and_save_files(db, chat_session, full_content, user_id)
@@ -1073,8 +1095,10 @@ async def _auto_compile_deliverable(
         else:
             await manager.send_json(websocket, {
                 "type": "error",
-                "message": "Story deliverable missing SAVE_FILE marker — file not saved. "
-                           "Ask the persona to retry with the required filename format.",
+                "message": (
+                    f"{template_id} deliverable missing SAVE_FILE marker — file not saved. "
+                    "Ask the persona to retry with the required filename format."
+                ),
             })
     else:
         await save_or_update_file(

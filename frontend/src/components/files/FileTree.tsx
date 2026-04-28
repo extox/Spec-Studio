@@ -7,6 +7,27 @@ import type { FileTreeItem } from "@/types";
 
 type SortMode = "name" | "date" | "size";
 
+// Lower number = earlier in the list. Unknown directories get 100 (alpha-sorted after).
+const DIR_ORDER: Record<string, number> = {
+  "planning-artifacts": 10,
+  "implementation-artifacts": 20,
+  "construction-artifacts": 30,
+  "context": 40,
+  "uploads": 50,
+};
+
+function getDirOrder(dir: string): number {
+  return DIR_ORDER[dir] ?? 100;
+}
+
+function getDirIconColor(dir: string): string {
+  if (dir === "planning-artifacts") return "text-blue-500";
+  if (dir === "implementation-artifacts") return "text-orange-500";
+  if (dir === "construction-artifacts") return "text-emerald-600";
+  if (dir.startsWith("context")) return "text-purple-500";
+  return "text-muted-foreground";
+}
+
 interface FileTreeProps {
   files: FileTreeItem[];
   selectedId?: number;
@@ -198,6 +219,12 @@ export function FileTree({
 
       {Object.entries(grouped)
         .filter(([dir]) => dir !== ".")
+        .sort(([a], [b]) => {
+          const oa = getDirOrder(a);
+          const ob = getDirOrder(b);
+          if (oa !== ob) return oa - ob;
+          return a.localeCompare(b);
+        })
         .map(([dir, dirFiles]) => (
           <div
             key={dir}
@@ -208,7 +235,7 @@ export function FileTree({
           >
             <div className="group flex items-center justify-between px-2 py-1.5 mt-1">
               <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                <svg className="h-4 w-4 text-muted-foreground shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={cn("h-4 w-4 shrink-0", getDirIconColor(dir))} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                 </svg>
                 {renamingDir === dir ? (

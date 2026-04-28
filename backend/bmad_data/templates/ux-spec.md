@@ -13,6 +13,15 @@ date: '{{date}}'
 **Version:** 1.0
 **Status:** Draft
 
+<!--
+Anchor Convention (for traceability):
+- User flows: UF-001, UF-002, ... (use as flow section headings)
+- UI components: CMP-001, CMP-002, ...
+- When a flow or component derives from PRD user journeys or requirements, add a marker:
+    ### UF-001: Onboarding
+    <!-- derived_from: PRD#UJ-001, PRD#FR-002 -->
+-->
+
 ---
 
 ## 1. User Research
@@ -46,8 +55,9 @@ date: '{{date}}'
 
 ## 3. User Flows
 
-### 3.1 {{Flow Name}}
+### UF-001: {{Flow Name}}
 
+<!-- derived_from: PRD#UJ-001 -->
 <!-- Entry → Key Actions → Completion -->
 <!-- Include decision points and error paths -->
 
@@ -78,7 +88,9 @@ date: '{{date}}'
 
 ## 6. Component Specifications
 
-### 6.1 {{Component Name}}
+### CMP-001: {{Component Name}}
+
+<!-- derived_from: UX#UF-001 -->
 
 **Purpose:** 
 **States:** Default, Hover, Active, Disabled, Loading, Error

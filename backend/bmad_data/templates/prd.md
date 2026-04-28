@@ -13,6 +13,15 @@ date: '{{date}}'
 **Version:** 1.0
 **Status:** Draft
 
+<!--
+Anchor Convention (for traceability):
+- Functional requirements use stable IDs: FR-001, FR-002, ...
+- Non-functional requirements: NFR-001, NFR-002, ...
+- User journeys: UJ-001, UJ-002, ...
+These IDs are anchors that downstream artifacts (Architecture, Epics, Stories)
+reference via derived_from markers. Do NOT renumber IDs once assigned.
+-->
+
 ---
 
 ## 1. Executive Summary
@@ -60,7 +69,7 @@ date: '{{date}}'
 
 ## 5. User Journeys
 
-### User Type 1: {{persona_name}}
+### UJ-001: {{persona_name}}
 
 <!-- Narrative story-based journey, not just steps. Include emotional state. -->
 

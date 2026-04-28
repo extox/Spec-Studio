@@ -361,7 +361,7 @@ cd backend
 
 | 변수명 | 설명 | 기본값 |
 |--------|------|--------|
-| `DATABASE_URL` | 데이터베이스 연결 문자열 | `sqlite+aiosqlite:///./web_bmad.db` |
+| `DATABASE_URL` | 데이터베이스 연결 문자열 | `sqlite+aiosqlite:///./spec_data.db` |
 | `JWT_SECRET_KEY` | JWT 서명 키 (프로덕션에서 반드시 변경) | `dev-secret-key-change-in-production` |
 | `JWT_ALGORITHM` | JWT 알고리즘 | `HS256` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Access Token 만료 시간 (분) | `30` |

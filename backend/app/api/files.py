@@ -204,10 +204,17 @@ async def load_samples(
 
     created = []
     for sample in sample_fn():
+        # Files placed under context/ are context-expansion YAML; everything
+        # else is a deliverable. Optional `file_type` override on the sample
+        # entry takes precedence when present.
+        path = sample["file_path"]
+        ftype = sample.get("file_type") or (
+            "context" if path.startswith("context/") else "deliverable"
+        )
         f = await create_file(
             db, project_id, user.id,
-            sample["file_path"], sample["file_name"],
-            "deliverable", sample["content"],
+            path, sample["file_name"],
+            ftype, sample["content"],
         )
         created.append(f)
     return created

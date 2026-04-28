@@ -10,6 +10,13 @@ CONTEXT_CATEGORIES = {
         "description": "AS-IS / To-Be 시스템 아키텍처를 시각적으로 모델링하고 YAML로 관리합니다.",
         "icon": "layers",
     },
+    "tech-stack": {
+        "id": "tech-stack",
+        "name": "기술 스택",
+        "name_en": "Tech Stack",
+        "description": "프로젝트에서 사용할 언어/프레임워크/DB/클라우드 등을 선언합니다. Construction 워크플로우(코드 스캐폴딩, 테스트, CI, IaC)에서 우선 참조됩니다.",
+        "icon": "stack",
+    },
     # Keep old IDs as aliases for backward compatibility
     "legacy-system": {
         "id": "legacy-system",
@@ -34,6 +41,7 @@ REQUIRED_FIELDS = {
     "system-architecture": {"system_name": "시스템 이름", "system_type": "시스템 유형"},
     "legacy-system": {"system_name": "시스템 이름", "system_type": "시스템 유형"},
     "architecture": {"system_name": "시스템 이름", "system_type": "시스템 유형"},
+    "tech-stack": {"language": "주 사용 언어", "frameworks": "프레임워크 목록"},
 }
 
 

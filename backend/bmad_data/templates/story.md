@@ -1,15 +1,19 @@
----
-storyId: '{{story_id}}'
-epicId: '{{epic_id}}'
-status: 'backlog'
-points: 0
----
 # Story: {{story_title}}
+
+<!--
+Anchor Convention (for traceability):
+- This story's anchor is its story_id (e.g. E1-S3 or S-014).
+- Always add a derived_from marker listing the PRD FRs/NFRs and Architecture
+  components that this story implements, e.g.:
+    <!-- derived_from: PRD#FR-001, ARCH#C-1 -->
+-->
+
+<!-- derived_from: PRD#FR-001 -->
 
 **ID:** {{story_id}}
 **Epic:** {{epic_id}} - {{epic_title}}
 **Points:** {{points}}
-**Status:** {{status}}
+**Status:** backlog
 
 ---
 

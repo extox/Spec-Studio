@@ -69,4 +69,51 @@ async def save_or_update_file(
             },
         })
 
+    # Fire-and-forget traceability rebuild for this file. Uses its own DB session
+    # so it cannot interfere with the request lifecycle. Failures are swallowed —
+    # traceability is auxiliary, never blocks a save.
+    try:
+        import asyncio
+        from app.api.traceability import background_rebuild_after_save
+        asyncio.create_task(
+            background_rebuild_after_save(saved.project_id, saved.id)
+        )
+    except Exception:
+        pass
+
+    # Fire-and-forget bolt-activity capture: if a Bolt is currently `in_bolt`
+    # for this project, append a `file_saved` activity to it.
+    try:
+        import asyncio
+        from app.database import async_session
+        from app.services.bolt_service import get_active_bolt_for_project, log_activity
+
+        async def _capture():
+            async with async_session() as bdb:
+                try:
+                    active = await get_active_bolt_for_project(bdb, saved.project_id)
+                    if active:
+                        await log_activity(
+                            bdb, active.id, "file_saved",
+                            {"file_id": saved.id, "file_path": saved.file_path},
+                            user_id,
+                        )
+                        await bdb.commit()
+                except Exception:
+                    await bdb.rollback()
+
+        asyncio.create_task(_capture())
+    except Exception:
+        pass
+
+    # Fire-and-forget validation re-run (rule-based only, no LLM rules).
+    try:
+        import asyncio
+        from app.services.validation_service import background_run_after_save
+        asyncio.create_task(
+            background_run_after_save(saved.project_id, saved.id)
+        )
+    except Exception:
+        pass
+
     return saved
