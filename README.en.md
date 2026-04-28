@@ -57,8 +57,11 @@ By combining these, we realize the SDD paradigm where **"Spec is both the starti
 ### System Architecture Canvas — Visual modeling on Xyflow + AI Review
 ![System Architecture](./sample_images/Sample06.png)
 
-### Goal-Backward Traceability — PRD/ARCH/EPIC anchor graph
+### Goal-Backward Traceability — PRD/ARCH/EPIC/STORY anchor graph + AI-suggested links
 ![Traceability](./sample_images/Sample07.png)
+
+### Story Execution Board — Story kanban with bulk-generate / preview / edit deeplink
+![Story Execution Board](./sample_images/Sample08.png)
 
 ---
 

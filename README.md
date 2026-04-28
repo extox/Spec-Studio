@@ -57,8 +57,11 @@
 ### System Architecture 캔버스 — Xyflow 기반 시각 모델링 + AI Review
 ![System Architecture](./sample_images/Sample06.png)
 
-### Goal-Backward Traceability — PRD/ARCH/EPIC 앵커 그래프
+### Goal-Backward Traceability — PRD/ARCH/EPIC/STORY 앵커 그래프 + AI 추천 링크
 ![Traceability](./sample_images/Sample07.png)
+
+### 실행 보드(Story Execution Board) — Story 단위 칸반 + 일괄 생성 / 미리보기 / 편집 deeplink
+![Story Execution Board](./sample_images/Sample08.png)
 
 ---
 
