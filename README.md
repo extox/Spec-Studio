@@ -42,6 +42,9 @@
 ### 대시보드 — 프로젝트 목록 & 활동 피드
 ![Dashboard](./sample_images/Sample01.png)
 
+### 프로젝트 상세 — 아티팩트 진행 현황 + 실행/멤버 통계 + 최근 실행 세션
+![Project Detail](./sample_images/Sample01_2.png)
+
 ### AI 페르소나 채팅 — 단계별 워크플로우 진행 (A/P/C 메뉴 포함)
 ![Persona Chat](./sample_images/Sample02.png)
 
@@ -62,6 +65,9 @@
 
 ### 실행 보드(Story Execution Board) — Story 단위 칸반 + 일괄 생성 / 미리보기 / 편집 deeplink
 ![Story Execution Board](./sample_images/Sample08.png)
+
+### 검증(Validation) — PRD FR 커버리지 체크 + 미커버 Story 식별 + derived_from 마커 가이드
+![Validation](./sample_images/Sample09.png)
 
 ---
 

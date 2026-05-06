@@ -42,6 +42,9 @@ By combining these, we realize the SDD paradigm where **"Spec is both the starti
 ### Dashboard — Project list & activity feed
 ![Dashboard](./sample_images/Sample01.png)
 
+### Project Detail — Artifact progress + execution/member stats + recent sessions
+![Project Detail](./sample_images/Sample01_2.png)
+
 ### AI Persona Chat — Step-by-step workflow execution (with A/P/C menu)
 ![Persona Chat](./sample_images/Sample02.png)
 
@@ -62,6 +65,9 @@ By combining these, we realize the SDD paradigm where **"Spec is both the starti
 
 ### Story Execution Board — Story kanban with bulk-generate / preview / edit deeplink
 ![Story Execution Board](./sample_images/Sample08.png)
+
+### Validation — PRD FR coverage check + uncovered Story detection + derived_from marker guidance
+![Validation](./sample_images/Sample09.png)
 
 ---
 
