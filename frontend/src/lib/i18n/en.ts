@@ -17,9 +17,9 @@ const en: Record<TranslationKey, string> = {
 
   // Auth
   "auth.welcomeBack": "Welcome back",
-  "auth.signInTo": "Sign in to Dev.AI Spec Studio",
+  "auth.signInTo": "Sign in to Spec Studio",
   "auth.getStarted": "Get started",
-  "auth.createAccount": "Create your Dev.AI Spec Studio account",
+  "auth.createAccount": "Create your Spec Studio account",
   "auth.email": "Email",
   "auth.emailPlaceholder": "you@example.com",
   "auth.password": "Password",

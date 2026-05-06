@@ -15,9 +15,9 @@ const ko = {
 
   // Auth
   "auth.welcomeBack": "다시 오신 것을 환영합니다",
-  "auth.signInTo": "Dev.AI Spec Studio에 로그인",
+  "auth.signInTo": "Spec Studio에 로그인",
   "auth.getStarted": "시작하기",
-  "auth.createAccount": "Dev.AI Spec Studio 계정 만들기",
+  "auth.createAccount": "Spec Studio 계정 만들기",
   "auth.email": "이메일",
   "auth.emailPlaceholder": "you@example.com",
   "auth.password": "비밀번호",

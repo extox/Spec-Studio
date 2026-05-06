@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Dev.AI Spec Studio",
+  title: "Spec Studio",
   description: "AI-Driven Development 실행을 위한 웹기반 Spec lifecycle 관리 협업 서비스",
 };
 

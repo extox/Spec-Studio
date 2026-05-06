@@ -117,7 +117,7 @@ export default function GuidePage() {
 
     printWindow.document.write(`<!DOCTYPE html><html><head>
 <meta charset="utf-8">
-<title>Dev.AI Spec Studio - ${title}</title>
+<title>Spec Studio - ${title}</title>
 <style>
 @media print {
   @page { margin: 20mm 15mm; size: A4; }
@@ -141,9 +141,9 @@ code { background: #f1f5f9; padding: 2px 4px; border-radius: 3px; font-size: 11p
 .footer-bar { text-align: center; font-size: 10px; color: #94a3b8; margin-top: 32px; border-top: 1px solid #e2e8f0; padding-top: 12px; }
 </style>
 </head><body>
-<div class="header-bar">Dev.AI Spec Studio — 사용자 가이드</div>
+<div class="header-bar">Spec Studio — 사용자 가이드</div>
 ${html}
-<div class="footer-bar">Dev.AI Spec Studio &copy; ${new Date().getFullYear()}</div>
+<div class="footer-bar">Spec Studio &copy; ${new Date().getFullYear()}</div>
 </body></html>`);
 
     printWindow.document.close();
@@ -251,7 +251,7 @@ function GuideContent({ section, locale }: { section: Section; locale: string })
       <article className="prose prose-sm max-w-none">
         <h1>서비스 개요</h1>
         <p>
-          <strong>Dev.AI Spec Studio</strong>는 AI-Driven Development(AIDD) 실행을 위한 웹기반 Spec lifecycle 관리 협업 서비스입니다.
+          <strong>Spec Studio</strong>는 AI-Driven Development(AIDD) 실행을 위한 웹기반 Spec lifecycle 관리 협업 서비스입니다.
           소프트웨어 개발의 기획부터 구현 준비까지, 6명의 AI 전문가 페르소나와 체계적으로 산출물을 만들어갑니다.
         </p>
 
@@ -679,7 +679,7 @@ function GuideContent({ section, locale }: { section: Section; locale: string })
     case "collaboration": return (
       <article className="prose prose-sm max-w-none">
         <h1>다중 사용자 협업</h1>
-        <p>Dev.AI Spec Studio는 팀 단위 실시간 협업을 지원합니다.</p>
+        <p>Spec Studio는 팀 단위 실시간 협업을 지원합니다.</p>
 
         <h2>프로젝트 멤버 관리</h2>
         <ul>

@@ -32,7 +32,7 @@ export function Header() {
         <div className="h-7 w-7 rounded-md bg-primary flex items-center justify-center">
           <span className="text-xs font-bold text-primary-foreground tracking-tight">B</span>
         </div>
-        <span className="text-[13px] font-semibold tracking-tight text-foreground">Dev.AI Spec Studio</span>
+        <span className="text-[13px] font-semibold tracking-tight text-foreground">Spec Studio</span>
       </Link>
       <div className="flex items-center gap-2">
         <button
